@@ -1,0 +1,22 @@
+name: Feature Request
+description: Suggest an idea for this project
+title: "[feature name]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: Describe the feature you are requesting
+  - type: dropdown
+    id: typeOfFeature
+    attributes:
+      label: Type of Feature
+      description: What type of feature is this?
+      multiple: true
+      options:
+        - Backend
+        - Frontend
+        - Other
+    validations:
+      required: true
