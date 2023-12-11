@@ -25,11 +25,12 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
+                key: const Key('logo_image'),
                 'lib/images/logo.png',
                 height: 200,
               ),
@@ -118,7 +119,10 @@ class _LoginPageState extends State<LoginPage> {
                         'This feature is not implemented yet.',
                       );
                     },
-                    child: const ImageTileBlur(imagePath: 'lib/images/google.png'),
+                    child: const ImageTileBlur(
+                      key: Key('google_image'),
+                      imagePath: 'lib/images/google.png',
+                      ),
                   ),
                 ],
               ),

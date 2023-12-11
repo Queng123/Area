@@ -34,6 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
+                key: const Key('logo_image'),
                 'lib/images/logo.png',
                 height: 200,
               ),
