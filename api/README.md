@@ -1,4 +1,3 @@
-<p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
@@ -24,7 +23,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+API written in NextJS for the AREA project. This API is used to communicate with the different services and the front-end.
 
 ## Installation
 
@@ -32,42 +31,38 @@
 $ npm install
 ```
 
-## Running the app
+## Commands
+
+#### Migrations
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+# Generate a new migration
+npm run migration:generate --name=<migration_name>
 ```
-
-## Test
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+# Run migrations
+npm run migration:run
 ```
 
-## Support
+```bash
+# Revert migrations
+npm run migration:revert
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# Show migrations status
+npm run migration:show
+```
 
-## Stay in touch
+#### Tests
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Run tests
+npm run test
+```
 
-## License
-
-Nest is [MIT licensed](LICENSE).
+```bash
+# Run tests with coverage
+npm run test:cov
+```
