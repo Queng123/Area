@@ -1,0 +1,53 @@
+version: "3"
+services:
+
+  client_web:
+    build: ./area_front_web
+    networks:
+      - api-tier
+    ports:
+      - 8081:3000
+    restart: on-failure
+    depends_on:
+      - server
+      - client_mobile
+    volumes:
+      - ./area_front_web:/usr/src/app
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      MODE: ${MODE}
+
+  server:
+    build: ./api
+    networks:
+      - api-tier
+    ports:
+      - 8080:3000
+    restart: on-failure
+    volumes:
+      - shared_volume:/usr/src/app-release/
+      - ./api:/usr/src/app
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_PORT: ${DB_PORT}
+      MODE: ${MODE}
+
+  client_mobile:
+    build:
+      context: ./area_front_app
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/usr/src/app-release/
+
+volumes:
+  shared_volume:
+
+networks:
+  api-tier:

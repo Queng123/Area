@@ -1,0 +1,167 @@
+#!/bin/python3
+
+import argparse
+import os
+import subprocess
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[1;32m'
+    WARNING = '\033[93m'
+    FAIL = '\033[1;31m'
+    ENDC = '\033[0m'
+
+def log(message, color):
+    print(color +'[+] ' + message + bcolors.ENDC)
+
+class Area:
+
+    containers = {
+        'web': 'area-client_web-1',
+        'api': 'area-server-1',
+    }
+
+    image = {
+        'mobile': 'area-client_mobile',
+        'web': 'area-client_web',
+        'api': 'area-server',
+    }
+
+    def __init__(self):
+        self.startInfrastructure = False
+        self.stopInfrastructure = False
+        self.displayStatus = False
+        self.test = False
+        self.logs = False
+
+    def parseArgs(self):
+        parser = argparse.ArgumentParser(description="Handle the infrastructure deployed with Docker Compose")
+        parser.add_argument("-t", "--test", help="Run container tests", required=False, action="store_true")
+        parser.add_argument("-l", "--logs", help="Display logs of a container", required=False, action="store_true")
+        parser.add_argument("-u", "--up", help="Start the infrastructure", required=False, action="store_true")
+        parser.add_argument("-d", "--down", help="Stop the infrastructure", required=False, action="store_true")
+        parser.add_argument("-s", "--status", help="Display the status of the infrastructure", required=False, action="store_true")
+        parser.add_argument("-c", "--container", help="Container name", required=False, choices=self.containers.keys())
+        parser.add_argument("-p", "--prune", help="Delete the containers and the images", required=False, action="store_true")
+        args = parser.parse_args()
+        self.startInfrastructure = args.up
+        self.stopInfrastructure = args.down
+        self.displayStatus = args.status
+        self.runTest = args.test
+        self.logs = args.logs
+        self.containersTarget = args.container
+        self.runPrune = args.prune
+
+    def checkConfig(self):
+        if not os.path.isfile("docker-compose.yml"):
+            log("docker-compose.yml not found", bcolors.FAIL)
+            exit(1)
+        if self.startInfrastructure and self.stopInfrastructure:
+            log("Cannot start and stop the infrastructure at the same time", bcolors.FAIL)
+            exit(1)
+
+
+    def run(self):
+        if self.startInfrastructure:
+            self.start()
+        if self.stopInfrastructure:
+            self.stop()
+        if self.displayStatus:
+            self.status()
+        if self.runTest:
+            self.runTests()
+        if self.logs:
+            self.displayLogs()
+        if self.runPrune:
+            self.prune()
+
+    def runTests(self):
+        res = []
+        if self.containersTarget is None:
+            log("Since no container was specified, running tests on all containers", bcolors.WARNING)
+            log("Running tests...", bcolors.OKBLUE)
+            log("Running API tests with " + self.containers['api'] + "...", bcolors.OKBLUE)
+            res.append(subprocess.run(["docker", "container", "exec", self.containers['api'], "npm", "test"]))
+            log("Running Web tests with " + self.containers['web'] + "...", bcolors.OKBLUE)
+            res.append(subprocess.run(["docker", "container", "exec", self.containers['web'], "npm", "test"]))
+            for r in res:
+                if r.returncode != 0:
+                    log("Tests failed", bcolors.FAIL)
+                    return
+            log("Done", bcolors.OKGREEN)
+        else:
+            log("Running tests...", bcolors.OKBLUE)
+            log("Running tests with " + self.containers[self.containersTarget] + "...", bcolors.OKBLUE)
+            res = subprocess.run(["docker", "container", "exec", self.containers[self.containersTarget], "npm", "test"])
+            if res.returncode != 0:
+                log("Tests failed", bcolors.FAIL)
+                return
+            log("Done", bcolors.OKGREEN)
+
+
+    def displayLogs(self):
+        if self.containersTarget is None:
+            log("Since no container was specified, displaying logs of all containers", bcolors.WARNING)
+            log("Displaying logs...", bcolors.OKBLUE)
+            log("Displaying logs of " + self.containers['api'] + "...", bcolors.OKBLUE)
+            subprocess.run(["docker", "container", "logs", self.containers['api']])
+            log("Displaying logs of " + self.containers['web'] + "...", bcolors.OKBLUE)
+            subprocess.run(["docker", "container", "logs", self.containers['web']])
+            log("Done", bcolors.OKGREEN)
+        else:
+            log("Displaying logs...", bcolors.OKBLUE)
+            log("Displaying logs of " + self.containers[self.containersTarget] + "...", bcolors.OKBLUE)
+            subprocess.run(["docker", "container", "logs", self.containers[self.containersTarget]])
+            log("Done", bcolors.OKGREEN)
+
+    def start(self):
+        if self.isUpAndRunning():
+            log("Infrastructure already started", bcolors.WARNING)
+            return
+        log("Starting up the infrastructure...", bcolors.OKBLUE)
+        subprocess.run(["docker", "compose", "down"], stdout=subprocess.DEVNULL)
+        subprocess.run(["docker", "compose", "up", "-d"], stdout=subprocess.DEVNULL)
+        log("Waiting for the API container to start...", bcolors.OKBLUE)
+        subprocess.run(["sleep", "2"])
+        if not self.isUpAndRunning():
+            log("Failed to start the infrastructure", bcolors.FAIL)
+            log("Please build the images with 'docker compose build' and try again", bcolors.FAIL)
+            exit(1)
+        log("Infrastructure started", bcolors.OKGREEN)
+
+    def stop(self):
+        if not self.isUpAndRunning():
+            log("Infrastructure already stopped", bcolors.WARNING)
+            return
+        log("Cleaning up...", bcolors.OKBLUE)
+        subprocess.run(["docker", "compose", "down"], stdout=subprocess.DEVNULL)
+        log("Infrastructure stopped", bcolors.OKGREEN)
+        subprocess.run(["sleep", "1"])
+
+    def status(self):
+        log("Infrastructure status", bcolors.OKBLUE)
+        subprocess.run(["docker", "compose", "ps"])
+        log("Done", bcolors.OKGREEN)
+
+    def prune(self):
+        log("Pruning containers and images", bcolors.OKBLUE)
+        images = [value for key, value in self.image.items()]
+        if self.isUpAndRunning():
+            self.stop()
+        subprocess.run(["docker", "image", "remove", *images])
+        log("Done", bcolors.OKGREEN)
+
+    def isUpAndRunning(self):
+        output = subprocess.run(["docker", "compose", "ps"], stdout=subprocess.PIPE)
+        output = output.stdout.decode('utf-8')
+        for key, value in self.containers.items():
+            if value in output:
+                return True
+        return False
+
+if __name__ == "__main__":
+    area = Area()
+    area.isUpAndRunning()
+    area.parseArgs()
+    area.run()
