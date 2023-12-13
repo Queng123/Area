@@ -44,6 +44,24 @@ export class UserController {
     }
   }
 
+  @Get('login/google')
+  @ApiOperation({ summary: 'Logs a user into the application, using Google.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Send the google login url.',
+  })
+  async loginGoogle(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.loginUserWithGoogle(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+        console.error('Error during user login:', error);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
   @Get('logout')
   @ApiOperation({ summary: 'Logs a user out of the application.' })
   @ApiResponse({

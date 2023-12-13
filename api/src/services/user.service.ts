@@ -46,6 +46,21 @@ export class UserService {
     }
   }
 
+  async loginUserWithGoogle(body: any): Promise<[number, string]> {
+    try {
+      let response = await supabase.auth.signInWithOAuth({
+        provider: 'google'
+      })
+      if (response.error) {
+        throw response.error;
+      }
+
+      return [200, 'success: ' + response.data.url];
+    } catch (error) {
+      return [error.status, error.message];
+    }
+  }
+
   async logoutUser(): Promise<[number, string]> {
     try {
       let response = await supabase.auth.signOut();
