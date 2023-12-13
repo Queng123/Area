@@ -45,6 +45,32 @@ describe('UserService', () => {
 
     expect(result).toEqual([500, 'error, internal server error']);
   });
+
+  it('should login a user with email', async () => {
+    const mockBody = {
+      email: 'test@example.com',
+      password: 'testpassword',
+    };
+
+    jest.spyOn(userService, 'loginUserWithEmail').mockResolvedValueOnce([200, 'success, User logged in']);
+
+    const result = await userService.loginUserWithEmail(mockBody);
+
+    expect(result).toEqual([200, 'success, User logged in']);
+  });
+
+  it('should handle login error', async () => {
+    const mockBody = {
+      email: 'test@example.com',
+      password: 'testpassword',
+    };
+
+    jest.spyOn(userService, 'loginUserWithEmail').mockResolvedValueOnce([500, 'error, internal server error']);
+
+    const result = await userService.loginUserWithEmail(mockBody);
+
+    expect(result).toEqual([500, 'error, internal server error']);
+  });
 });
 
 describe('UserCoontroller', () => {
@@ -105,5 +131,51 @@ describe('UserCoontroller', () => {
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({ message: 'error, internal server error' });
+  });
+
+  it('should handle user login with email', async () => {
+    const mockRequest = {
+      body: {
+        email: 'test@example.com',
+        password: 'testpassword',
+      }
+    };
+
+    const mockResponse = {
+      status: jest.fn(() => mockResponse),
+      json: jest.fn(),
+    };
+
+    const mockLoginUserResult: [number, string] = [200, 'success, User logged in'];
+    jest.spyOn(userService, 'loginUserWithEmail').mockResolvedValueOnce(mockLoginUserResult);
+
+    await controller.loginEmail(mockResponse as Response, mockRequest as Request);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'success, User logged in' });
+  });
+
+  it('should handle user login error', async () => {
+    const mockRequest = {
+      body: {
+        email: 'test@example.com',
+        password: 'testpassword',
+      }
+    };
+
+    const mockResponse = {
+      status: jest.fn(() => mockResponse),
+      json: jest.fn(),
+    };
+
+    const mockLoginUserResult: [number, string] = [500, 'error, internal server error'];
+
+    jest.spyOn(userService, 'loginUserWithEmail').mockResolvedValueOnce(mockLoginUserResult);
+
+    await controller.loginEmail(mockResponse as Response, mockRequest as Request);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'error, internal server error' });
+
   });
 });

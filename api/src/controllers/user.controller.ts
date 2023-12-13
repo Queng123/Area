@@ -25,5 +25,41 @@ export class UserController {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Post('login/email')
+  @ApiOperation({ summary: 'Logs a user into the application, using email.' })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully logged in.',
+  })
+  async loginEmail(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.loginUserWithEmail(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+        console.error('Error during user login:', error);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Get('logout')
+  @ApiOperation({ summary: 'Logs a user out of the application.' })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully logged out.',
+  })
+  async logout(@Res() res: Response): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.logoutUser();
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+        console.error('Error during user logout:', error);
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
 }
 
