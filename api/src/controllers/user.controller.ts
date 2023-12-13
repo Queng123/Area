@@ -61,5 +61,39 @@ export class UserController {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
-}
 
+  @Post('reset-password')
+  @ApiOperation({ summary: 'Sends a password reset email to the user.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Password reset email sent.',
+  })
+  async resetPassword(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const { email } = request.body;
+      await this.userService.resetPassword(email);
+
+      return res.status(HttpStatus.OK).json({ message: 'Password reset email sent.' });
+    } catch (error) {
+      console.error('Error during user password reset:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Post('update-password')
+  @ApiOperation({ summary: 'Updates the user password.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Password updated.',
+  })
+  async updatePassword(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.updatePassword(request.body);
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during user password update:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+}

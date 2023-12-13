@@ -71,6 +71,32 @@ describe('UserService', () => {
 
     expect(result).toEqual([500, 'error, internal server error']);
   });
+
+  it('should logout a user', async () => {
+    jest.spyOn(userService, 'logoutUser').mockResolvedValueOnce([200, 'success, User logged out']);
+
+    const result = await userService.logoutUser();
+
+    expect(result).toEqual([200, 'success, User logged out']);
+  });
+
+  it('should handle logout error', async () => {
+    jest.spyOn(userService, 'logoutUser').mockResolvedValueOnce([500, 'error, internal server error']);
+
+    const result = await userService.logoutUser();
+
+    expect(result).toEqual([500, 'error, internal server error']);
+  });
+
+  it('should reset a user password', async () => {
+    const mockEmail = 'test@example.com';
+
+    jest.spyOn(userService, 'resetPassword').mockResolvedValueOnce([200, 'success, Password reset email sent']);
+
+    const result = await userService.resetPassword(mockEmail);
+
+    expect(result).toEqual([200, 'success, Password reset email sent']);
+  });
 });
 
 describe('UserCoontroller', () => {
@@ -177,5 +203,56 @@ describe('UserCoontroller', () => {
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({ message: 'error, internal server error' });
 
+  });
+
+  it('should handle user logout', async () => {
+    const mockResponse = {
+      status: jest.fn(() => mockResponse),
+      json: jest.fn(),
+    };
+
+    const mockLogoutUserResult: [number, string] = [200, 'success, User logged out'];
+    jest.spyOn(userService, 'logoutUser').mockResolvedValueOnce(mockLogoutUserResult);
+
+    await controller.logout(mockResponse as Response);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'success, User logged out' });
+  });
+
+  it('should handle user logout error', async () => {
+    const mockResponse = {
+      status: jest.fn(() => mockResponse),
+      json: jest.fn(),
+    };
+
+    const mockLogoutUserResult: [number, string] = [500, 'error, internal server error'];
+    jest.spyOn(userService, 'logoutUser').mockResolvedValueOnce(mockLogoutUserResult);
+
+    await controller.logout(mockResponse as Response);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'error, internal server error' });
+  });
+
+  it('should handle user password reset', async () => {
+    const mockRequest = {
+      body: {
+        email: 'test@example.com',
+      }
+    };
+
+    const mockResponse = {
+      status: jest.fn(() => mockResponse),
+      json: jest.fn(),
+    };
+
+    const mockResetPasswordResult: [number, string] = [200, 'success, Password reset email sent'];
+    jest.spyOn(userService, 'resetPassword').mockResolvedValueOnce(mockResetPasswordResult);
+
+    await controller.resetPassword(mockResponse as Response, mockRequest as Request);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json).toHaveBeenCalledWith({ message: 'Password reset email sent.' });
   });
 });

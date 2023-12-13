@@ -58,4 +58,34 @@ export class UserService {
       return [error.status, error.message];
     }
   }
+
+  async resetPassword(email: string): Promise<[number, string]> {
+    try {
+      let response = await supabase.auth.resetPasswordForEmail(email,
+        {
+          redirectTo: process.env.APP_URL + '/',
+        }
+      );
+      if (response.error) {
+        throw response.error;
+      }
+
+      return [200, 'success, Password reset email sent'];
+    } catch (error) {
+      return [error.status, error.message];
+    }
+  };
+
+  async updatePassword(body: any): Promise<[number, string]> {
+    const { password } = body;
+    try {
+      let response = await supabase.auth.updateUser({ password: password });
+      if (response.error) {
+        throw response.error;
+      }
+      return [200, 'success, Password updated'];
+    } catch (error) {
+      return [error.status, error.message];
+    }
+  }
 }
