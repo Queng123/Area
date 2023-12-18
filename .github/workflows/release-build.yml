@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Create .env File
+        run: echo "BASE_URL=${{ secrets.BASE_URL }}" > area_front_app/.env
       - name: Flutter Install
         uses: subosito/flutter-action@v2.10.0
         with:
