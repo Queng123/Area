@@ -40,6 +40,7 @@ dependencies:
   giffy_dialog: ^2.0.0
   babstrap_settings_screen: ^0.1.6
   animated_splash_screen: ^1.3.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
