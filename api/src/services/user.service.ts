@@ -5,23 +5,28 @@ import supabase from '../config/supabase.config';
 export class UserService {
   async createUserWithEmail(body: any): Promise<[number, string]> {
     const { email, password, username } = body;
+
     try {
+      const session = await supabase
+        .from('profile')
+        .select('email')
+        .eq('email', email);
+
+      if (session.data.length > 0) {
+        return [409, 'error, User already exist'];
+      }
+
       let signUpOptions = {
         email: email,
         password: password,
-        options: {
-          data: {
-            username: '',
-          }
-        },
-      }
-      if (username) {
-        signUpOptions.options.data.username = username;
       }
       let response = await supabase.auth.signUp(signUpOptions);
       if (response.error) {
         throw response.error;
       }
+      await supabase.from('profile').insert([
+        { name: (username) ? username : '', email: email },
+      ]).select();
 
       return [201, 'success, User created'];
     } catch (error) {
@@ -32,14 +37,17 @@ export class UserService {
   async loginUserWithEmail(body: any): Promise<[number, string]> {
     const { email, password } = body;
     try {
-      let response = await supabase.auth.signInWithPassword({
+      const session = await supabase.auth.getSession();
+      if (session.data.session) {
+        return [409, 'error, User already logged in'];
+      }
+      const response = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
       });
       if (response.error) {
         throw response.error;
       }
-
       return [200, 'success, User logged in'];
     } catch (error) {
       return [error.status, error.message];
@@ -63,7 +71,11 @@ export class UserService {
 
   async logoutUser(): Promise<[number, string]> {
     try {
-      let response = await supabase.auth.signOut();
+      const session = await supabase.auth.getSession();
+      if (!session.data.session) {
+        return [409, 'error, User not logged in'];
+      }
+      const response = await supabase.auth.signOut();
       if (response.error) {
         throw response.error;
       }

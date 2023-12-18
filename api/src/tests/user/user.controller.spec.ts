@@ -130,7 +130,7 @@ describe('UserCoontroller', () => {
     const mockCreateUserResult: [number, string] = [201, 'success, User created'];
     jest.spyOn(userService, 'createUserWithEmail').mockResolvedValueOnce(mockCreateUserResult);
 
-    await controller.signupEmail(mockResponse as Response, mockRequest as Request);
+    await controller.registerEmail(mockResponse as Response, mockRequest as Request);
 
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith({ message: 'success, User created' });
@@ -153,7 +153,7 @@ describe('UserCoontroller', () => {
     const mockCreateUserResult: [number, string] = [500, 'error, internal server error'];
     jest.spyOn(userService, 'createUserWithEmail').mockResolvedValueOnce(mockCreateUserResult);
 
-    await controller.signupEmail(mockResponse as Response, mockRequest as Request);
+    await controller.registerEmail(mockResponse as Response, mockRequest as Request);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({ message: 'error, internal server error' });

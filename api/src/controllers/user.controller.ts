@@ -1,20 +1,34 @@
-import { Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Req,
+  Res
+} from '@nestjs/common';
+import {
+  Request,
+  Response
+} from 'express';
 import { UserService } from '../services/user.service';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse
+} from '@nestjs/swagger';
 
 @Controller('user')
 @ApiTags('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('signup/email')
+  @Post('register/email')
   @ApiOperation({ summary: 'Registers a user on the application to obtain an account, using email.' })
   @ApiResponse({
     status: 201,
     description: 'User successfully registered.',
   })
-  async signupEmail(@Res() res: Response, @Req() request: Request): Promise<Response> {
+  async registerEmail(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
       const [statusCode, message] = await this.userService.createUserWithEmail(request.body);
 
