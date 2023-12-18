@@ -11,6 +11,17 @@ class CustomBottomNavigationBar extends StatefulWidget {
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      if (_selectedIndex == 3) {
+        Navigator.pushNamed(context, '/setting');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +46,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               GButton(icon: Icons.dashboard, text: 'Dashboard'),
               GButton(icon: Icons.settings, text: 'Settings'),
             ],
+            selectedIndex: _selectedIndex,
+            onTabChange: _onItemTapped,
           ),
         ),
       ),

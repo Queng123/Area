@@ -3,6 +3,8 @@ import 'package:area_front_app/pages/auth/login_page.dart';
 import 'package:area_front_app/pages/auth/register_page.dart';
 import 'package:area_front_app/pages/home_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:area_front_app/pages/setting/setting_page.dart';
+import 'package:area_front_app/pages/setting/about_us.dart';
 import 'package:area_front_app/pages/splash_page.dart';
 
 void main() async {
@@ -34,6 +36,10 @@ class MyApp extends StatelessWidget {
                 return const RegisterPage();
               case '/home':
                 return const HomePage();
+              case '/setting':
+                return const SettingPage();
+              case '/aboutus':
+                return const AboutUsPage();
               default:
                 return const LoginPage();
             }
