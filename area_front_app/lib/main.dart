@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:area_front_app/pages/auth/login_page.dart';
 import 'package:area_front_app/pages/auth/register_page.dart';
 import 'package:area_front_app/pages/home_page.dart';
+import 'package:area_front_app/pages/splash_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -20,11 +22,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Area',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+      initialRoute: '/splash',
       onGenerateRoute: (settings) {
         return MaterialPageRoute(
           builder: (context) {
             switch (settings.name) {
+              case '/splash':
+                return const SplashPage();
               case '/login':
                 return const LoginPage();
               case '/register':
