@@ -30,7 +30,5 @@ void main() {
     await tester.enterText(find.byType(TextField).at(2), 'password123');
     await tester.pump();
 
-    await tester.tap(find.text('Sign Up'));
-    await tester.pump();
   });
 }

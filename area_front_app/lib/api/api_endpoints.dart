@@ -1,5 +1,7 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class ApiRoutes {
-  static const String baseUrl = 'http://localhost:3000/';
+  static String baseUrl = dotenv.env['BASE_URL'] ?? '';
 
   static const String signUpEmail = 'user/signup/email';
   static const String loginEmail = 'user/login/email';

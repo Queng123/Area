@@ -5,6 +5,16 @@ class ApiProtocolBody {
       '400': 'This email is already used',
       '500': 'An error occurred while registering',
     },
+    'Login': {
+      '200': 'You have been successfully logged in',
+      '400': 'Email not confirmed',
+      '500': 'An error occurred while logging in',
+    },
+    'OAuth2 Google': {
+      '200': 'Send the google login url.',
+      '400': 'Email not confirmed',
+      '500': 'An error occurred while logging in',
+    },
   };
 
   static String getMessage(String title, String statusCode) {

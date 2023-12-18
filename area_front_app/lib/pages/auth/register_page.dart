@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:area_front_app/components/generic_button.dart';
 import 'package:area_front_app/components/styled_text_field.dart';
-import 'package:area_front_app/components/managers_routes/routes/api_register.dart';
-import 'package:area_front_app/components/managers_routes/handler_validation_request.dart';
+import 'package:area_front_app/api/routes/auth/api_register.dart';
+import 'package:area_front_app/api/components/handler_validation_request.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

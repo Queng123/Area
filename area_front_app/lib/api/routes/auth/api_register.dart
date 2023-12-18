@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
-import 'package:area_front_app/components/managers_routes/api_requests.dart';
-import 'package:area_front_app/components/managers_routes/api_routes.dart';
+import 'package:area_front_app/api/api_requests.dart';
+import 'package:area_front_app/api/api_endpoints.dart';
 
 class ApiRegister {
   static Future<int> register(String email, String password) async {

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:area_front_app/components/managers_routes/protocol/api_protocol_body.dart';
+import 'package:area_front_app/api/protocol/api_protocol_body.dart';
 
 void main() {
   test('ApiProtocolBody Test', () {
