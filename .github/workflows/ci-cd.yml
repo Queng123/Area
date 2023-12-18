@@ -15,13 +15,16 @@ jobs:
         uses: subosito/flutter-action@v2.10.0
       - name: Install dependencies
         working-directory: ./area_front_app
-        run: flutter pub get
+        run: |
+          flutter pub get
+          echo "BASE_URL=${{ secrets.BASE_URL }}" > .env
       - name: Check Syntax
         run: flutter analyze
       - name: Run tests
         working-directory: ./area_front_app
         run: flutter test
-    continue-on-error: false
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}  
 
   run_nestJS_test:
     runs-on: ubuntu-latest
