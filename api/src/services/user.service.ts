@@ -116,6 +116,26 @@ export class UserService {
     }
   }
 
+  async deleteUser(): Promise<[number, string]> {
+    try {
+      const user = await supabase.auth.getUser();
+      if (!user.data.user) {
+        return [409, 'error, User not logged in'];
+      }
+      const response = await supabase.auth.admin.deleteUser(user.data.user.id);
+      if (response.error) {
+        throw response.error;
+      }
+      const response2 = await supabase.from('profile').delete().eq('email', user.data.user.id);
+      if (response2.error) {
+        throw response2.error;
+      }
+      return [200, 'success, User account deleted'];
+    } catch (error) {
+      return [error.status, error.message];
+    }
+  }
+
   async getUserName(): Promise<[number, string]> {
     try {
       const user = await supabase.auth.getUser();

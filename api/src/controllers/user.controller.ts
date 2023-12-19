@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Post,
@@ -125,6 +126,23 @@ export class UserController {
       return res.status(statusCode).json({ message });
     } catch (error) {
       console.error('Error during user password update:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Delete()
+  @ApiOperation({ summary: 'Deletes the current user account.' })
+  @ApiResponse({
+    status: 200,
+    description: 'User account deleted.',
+  })
+  async delete(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.deleteUser();
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during user deletion:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
