@@ -155,4 +155,32 @@ export class UserService {
       return [error.status, error.message];
     }
   }
+
+  async getUserService(): Promise<[number, string]> {
+    const user = await supabase.auth.getUser();
+    if (!user.data.user) {
+      return [409, 'error, User not logged in'];
+    }
+    const UserService = await supabase.from('user_provider').select('provider_id').eq('user_id', user.data.user.email);
+    var services = await supabase.from("provider").select("*");
+    var servicesList = [];
+
+    for (let i = 0; i < services.data.length; i++) {
+      var dictionnary = {
+        'name': services.data[i].name,
+        'isConnected': false
+      };
+      if (UserService.data != null) {
+        for (let j = 0; j < UserService.data.length; j++) {
+          console.log(UserService.data[j].provider_id, services.data[i].name);
+          if (services.data[i].name == UserService.data[j].provider_id) {
+            dictionnary.isConnected = true;
+          }
+        }
+      }
+      servicesList.push(dictionnary);
+    }
+
+    return [200, JSON.stringify(servicesList)];
+  }
 }

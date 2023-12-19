@@ -163,4 +163,21 @@ export class UserController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Get('services')
+  @ApiOperation({ summary: 'Gets the user services status (connected/not connected)' })
+  @ApiResponse({
+    status: 200,
+    description: 'User services status',
+  })
+  async getUserService(@Res() res: Response): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.getUserService();
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during user service status retrieval:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
 }
