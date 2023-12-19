@@ -115,4 +115,23 @@ export class UserService {
       return [error.status, error.message];
     }
   }
+
+  async getUserName(): Promise<[number, string]> {
+    try {
+      const user = await supabase.auth.getUser();
+      if (user.error) {
+        throw user.error;
+      }
+      const { data, error } = await supabase
+        .from('profile')
+        .select('name')
+        .single();
+      if (data.name === null || data.name === undefined || data.name === '') {
+        return [200, user.data.user.email.split('@')[0]];
+      }
+      return [200, data.name];
+    } catch (error) {
+      return [error.status, error.message];
+    }
+  }
 }

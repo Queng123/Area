@@ -128,4 +128,21 @@ export class UserController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Get()
+  @ApiOperation({ summary: 'Gets the user name.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Username',
+  })
+  async getUserName(@Res() res: Response): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.getUserName();
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during user name retrieval:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
 }
