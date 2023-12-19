@@ -38,6 +38,12 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_PORT: ${DB_PORT}
       MODE: ${MODE}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      GITHUB_CALLBACK_URI: ${GITHUB_CALLBACK_URI}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      APP_URL: ${APP_URL}
 
   client_mobile:
     build:
@@ -45,6 +51,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - shared_volume:/usr/src/app-release/
+    environment:
+      BASE_URL: ${BASE_URL}
 
 volumes:
   shared_volume:

@@ -20,9 +20,43 @@ export class AuthService {
       return [409, 'error, no user found'];
     }
 
-    await supabase.from('user_provider').insert([
-      { user_id: user.data.user.email, service_id: 'google', key: req.user.accessToken },
+    const { data, error } = await supabase.from('user_provider').insert([
+      {
+        user_id: user.data.user.email,
+        provider_id: 'google',
+        token: req.user.accessToken
+      },
     ]).select();
+    if (error) {
+      return [500, 'error, something went wrong'];
+    }
     return [200, 'success, User logged in with google'];
+  }
+
+  async githubLogin(req): Promise<[number, string]> {
+    const user = await supabase.auth.getUser();
+
+    if (user.error) {
+        return [401, 'error, User not logged in'];
+    }
+    const service = await supabase.from('user_provider')
+        .select('user_id, provider_id')
+        .eq('user_id', user.data.user.email)
+        .eq('provider_id', 'google');
+    if (!req.user) {
+        return [409, 'error, no user found'];
+    }
+    const { data, error } = await supabase.from('user_provider')
+        .insert([
+            {
+                user_id: 'user.data.user.email',
+                provider_id: 'github',
+                token: req.user
+            }
+        ]);
+    if (error) {
+        return [500, 'error, something went wrong'];
+    }
+    return [200, 'success, user connected with github'];
   }
 }
