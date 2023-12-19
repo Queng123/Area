@@ -7,6 +7,7 @@ class ApiRegister {
     final Map<String, dynamic> requestBody = {
       'email': email,
       'password': password,
+      'username': email.split('@')[0],
     };
 
     try {

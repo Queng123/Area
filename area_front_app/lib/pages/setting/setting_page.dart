@@ -2,6 +2,7 @@ import 'package:area_front_app/components/dialogs/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
+import 'package:area_front_app/components/profile_data.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -12,9 +13,24 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   bool _isSwitched = true;
-  final String _username = "@VyOk";
+  late Profile userProfile = Profile(
+    username: "Loading...",
+  );
   final String _userProfilePic =
       "https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileData();
+  }
+
+  Future<void> _loadProfileData() async {
+    userProfile = await Profile.loadProfile();
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +50,7 @@ class _SettingPageState extends State<SettingPage> {
         child: ListView(
           children: [
             SimpleUserCard(
-              userName: _username,
+              userName: "@${userProfile.username}",
               userProfilePic: NetworkImage(_userProfilePic),
             ),
             SettingsGroup(
