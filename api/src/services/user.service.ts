@@ -122,14 +122,15 @@ export class UserService {
       if (user.error) {
         throw user.error;
       }
+      const name = user.data.user.email.split('@')[0]
       const { data, error } = await supabase
         .from('profile')
         .select('name')
-        .single();
-      if (data.name === null || data.name === undefined || data.name === '') {
-        return [200, user.data.user.email.split('@')[0]];
+        .eq('email', user.data.user.email);
+      if (error) {
+        return [200, name];
       }
-      return [200, data.name];
+      return [200, data[0].name];
     } catch (error) {
       return [error.status, error.message];
     }
