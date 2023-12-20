@@ -10,4 +10,5 @@ class ApiRoutes {
   static const String resetPassword = 'user/reset-password';
   static const String updatePassword = 'user/update-password';
   static const String username = 'user/';
+  static const String userServices = 'user/services';
 }

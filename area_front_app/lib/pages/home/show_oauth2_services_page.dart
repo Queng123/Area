@@ -22,10 +22,10 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
   bool isShowOAuth2Services = false;
 
   List myOAuth2Services = [
-    ["GitHub", "lib/images/github.png", true],
-    ["Google", "lib/images/google.png", false],
-    ["Spotify", "lib/images/google.png", true],
-    ["Twitch", "lib/images/google.png", false],
+    ["Github", "lib/images/github.png"],
+    ["Google", "lib/images/google.png"],
+    ["Discord", "lib/images/google.png"],
+    ["Steam", "lib/images/google.png"],
   ];
 
   @override
@@ -43,7 +43,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
 
   void powerSwitchChanged(bool value, int index) {
     setState(() {
-      myOAuth2Services[index][2] = value;
+      userProfile.serviceStatus[myOAuth2Services[index][0]] = value;
     });
   }
 
@@ -68,8 +68,65 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     return OAuth2ServiceBox(
       oauth2Name: myOAuth2Services[index][0],
       iconPath: myOAuth2Services[index][1],
-      powerOn: myOAuth2Services[index][2],
-      onChanged: (value) => powerSwitchChanged(value, index),
+      powerOn: userProfile.serviceStatus[myOAuth2Services[index][0]] ?? false,
+      onChanged: (value) {
+        userProfile.serviceStatus[myOAuth2Services[index][0]] =
+            value;
+        if (value) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Connect service'),
+              content: const Text(
+                'You are about to connect this service.',
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    powerSwitchChanged(value, index);
+                  },
+                  child: const Text('Connect'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    userProfile.serviceStatus[myOAuth2Services[index][0]] =
+                        false;
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Disconnect service'),
+              content: const Text('You are about to disconnect this service.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    powerSwitchChanged(value, index);
+                  },
+                  child: const Text('Disconnect'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    userProfile.serviceStatus[myOAuth2Services[index][0]] =
+                        true;
+                  },
+                  child: const Text('Cancel'),
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 

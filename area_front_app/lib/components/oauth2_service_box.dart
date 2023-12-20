@@ -43,7 +43,7 @@ class OAuth2ServiceBox extends StatelessWidget {
                         oauth2Name,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: 18,
                           color: powerOn ? Colors.white : Colors.black,
                         ),
                       ),
