@@ -1,3 +1,4 @@
+import 'package:area_front_app/api/routes/api_delete_account.dart';
 import 'package:flutter/material.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:area_front_app/api/routes/auth/api_logout.dart';
@@ -211,7 +212,13 @@ class CustomDialog {
                       color: Colors.green, fontWeight: FontWeight.bold)),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                ApiDeleteAccount.deleteAccount().then((statusCode) {
+                  if (statusCode == 200) {
+                    Navigator.pushNamed(context, '/login');
+                  }
+                });
+              },
               child: const Text('Delete',
                   style: TextStyle(
                       color: Colors.red, fontWeight: FontWeight.bold)),
