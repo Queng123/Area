@@ -12,6 +12,7 @@ services:
       - server
       - client_mobile
     volumes:
+      - shared_volume:/usr/src/app-release/
       - ./area_front_web:/usr/src/app
     environment:
       DB_HOST: ${DB_HOST}

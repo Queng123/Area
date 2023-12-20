@@ -37,8 +37,8 @@ export class UserService {
   async loginUserWithEmail(body: any): Promise<[number, string]> {
     const { email, password } = body;
     try {
-      const session = await supabase.auth.getSession();
-      if (session.data.session) {
+      const user = await supabase.auth.getUser();
+      if (user.data.user != null) {
         return [409, 'error, User already logged in'];
       }
       const response = await supabase.auth.signInWithPassword({
@@ -71,15 +71,14 @@ export class UserService {
 
   async logoutUser(): Promise<[number, string]> {
     try {
-      const session = await supabase.auth.getSession();
-      if (!session.data.session) {
+      const user = await supabase.auth.getUser();
+      if (!user.data.user) {
         return [409, 'error, User not logged in'];
       }
       const response = await supabase.auth.signOut();
       if (response.error) {
         throw response.error;
       }
-
       return [200, 'success, User logged out'];
     } catch (error) {
       return [error.status, error.message];
@@ -119,14 +118,14 @@ export class UserService {
   async deleteUser(): Promise<[number, string]> {
     try {
       const user = await supabase.auth.getUser();
-      if (!user.data.user) {
+      if (user.data.user == null) {
         return [409, 'error, User not logged in'];
       }
       const response = await supabase.auth.admin.deleteUser(user.data.user.id);
       if (response.error) {
         throw response.error;
       }
-      const response2 = await supabase.from('profile').delete().eq('email', user.data.user.id);
+      const response2 = await supabase.from('profile').delete().eq('email', user.data.user.email);
       if (response2.error) {
         throw response2.error;
       }
