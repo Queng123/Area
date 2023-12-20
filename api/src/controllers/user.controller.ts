@@ -15,7 +15,8 @@ import { UserService } from '../services/user.service';
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse
+  ApiResponse,
+  ApiParam
 } from '@nestjs/swagger';
 
 @Controller('user')
@@ -177,6 +178,29 @@ export class UserController {
       return res.status(statusCode).json({ message });
     } catch (error) {
       console.error('Error during user service status retrieval:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Delete('services')
+  @ApiOperation({ summary: 'Deletes a user service' })
+  @ApiParam({
+    name: 'service',
+    type: String,
+    description: 'Service to delete',
+    required: true,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User service deleted',
+  })
+  async deleteUserService(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.userService.deleteUserProvider(request.body);
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during user service deletion:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
