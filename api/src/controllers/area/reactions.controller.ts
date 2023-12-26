@@ -1,0 +1,65 @@
+import { Controller, Get, HttpStatus, Post, Req, Res, Query } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { ReactionsService } from '../../services/area/reactions.service';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
+@Controller('reactions')
+@ApiTags('reactions')
+export class ReactionsController {
+  constructor(private readonly reactionsService: ReactionsService) {}
+
+  @Post()
+  @ApiOperation({ summary: 'Add new action in DB' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, action created',
+  })
+  async addAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [name, description, url, provider] = [request.body.name, request.body.description, request.body.url, request.body.provider];
+      const [statusCode, message] = await this.reactionsService.createReaction(name, description, url, provider);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Get all actions' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, actions getted',
+  })
+  async getReactions(@Res() res: Response): Promise<Response> {
+    try {
+      const [statusCode, actions] = await this.reactionsService.getReactions();
+
+      console.log(`Status Code: ${statusCode}, Message: ${actions}`);
+      return res.status(statusCode).json({ actions });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Post('email')
+  @ApiOperation({ summary: 'Send mail' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, mail send',
+  })
+  async sendMail(@Res() res: Response, @Query('email') email, @Query('action') action ): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.reactionsService.sendMail(email, action);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+}

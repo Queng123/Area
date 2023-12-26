@@ -12,7 +12,7 @@ export class AuthService {
     const service = await supabase.from('user_provider')
                             .select('user_id, provider_id')
                             .eq('user_id', user.data.user.email)
-                            .eq('provider_id', 'google');
+                            .eq('provider_id', 'Google');
     if (service.data !== null) {
       return [409, 'error, User already connected with google'];
     }
@@ -23,7 +23,7 @@ export class AuthService {
     const { data, error } = await supabase.from('user_provider').insert([
       {
         user_id: user.data.user.email,
-        provider_id: 'google',
+        provider_id: 'Google',
         token: req.user.accessToken
       },
     ]).select();
@@ -42,15 +42,15 @@ export class AuthService {
     const service = await supabase.from('user_provider')
         .select('user_id, provider_id')
         .eq('user_id', user.data.user.email)
-        .eq('provider_id', 'google');
+        .eq('provider_id', 'Github');
     if (!req.user) {
         return [409, 'error, no user found'];
     }
     const { data, error } = await supabase.from('user_provider')
         .insert([
             {
-                user_id: 'user.data.user.email',
-                provider_id: 'github',
+                user_id: user.data.user.email,
+                provider_id: 'Github',
                 token: req.user
             }
         ]);
