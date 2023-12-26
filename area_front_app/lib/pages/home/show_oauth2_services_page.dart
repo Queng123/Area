@@ -70,8 +70,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
       iconPath: myOAuth2Services[index][1],
       powerOn: userProfile.serviceStatus[myOAuth2Services[index][0]] ?? false,
       onChanged: (value) {
-        userProfile.serviceStatus[myOAuth2Services[index][0]] =
-            value;
+        userProfile.serviceStatus[myOAuth2Services[index][0]] = value;
         if (value) {
           showDialog(
             context: context,
