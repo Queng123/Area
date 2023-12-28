@@ -17,7 +17,7 @@ jobs:
         working-directory: ./area_front_app
         run: |
           flutter pub get
-          echo "BASE_URL=${{ secrets.BASE_URL }}" > .env
+          echo "BASE_URL=${{ secrets.BASE_URL }}" && echo "SCOPE=${{ secrets.SCOPE }}" && echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" > .env
       - name: Check Syntax
         run: flutter analyze
       - name: Run tests
@@ -25,6 +25,8 @@ jobs:
         run: flutter test
         env:
           BASE_URL: ${{ secrets.BASE_URL }}  
+          SCOPE: ${{ secrets.SCOPE }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
 
   run_nestJS_test:
     runs-on: ubuntu-latest

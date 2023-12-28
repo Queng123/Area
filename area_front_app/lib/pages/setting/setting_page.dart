@@ -2,7 +2,7 @@ import 'package:area_front_app/components/dialogs/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
-import 'package:area_front_app/components/profile_data.dart';
+import 'package:area_front_app/models/profile_data.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});

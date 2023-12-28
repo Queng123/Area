@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create .env File
-        run: echo "BASE_URL=${{ secrets.BASE_URL }}" > area_front_app/.env
+        run: echo "BASE_URL=${{ secrets.BASE_URL }}" && echo "SCOPE=${{ secrets.SCOPE }}" && echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" > area_front_app/.env
       - name: Flutter Install
         uses: subosito/flutter-action@v2.10.0
         with:

@@ -4,7 +4,7 @@ import 'package:area_front_app/components/styled_text_field.dart';
 import 'package:area_front_app/components/image_tile_blur.dart';
 import 'package:area_front_app/api/routes/auth/api_login.dart';
 import 'package:area_front_app/api/components/handler_validation_request.dart';
-import 'package:area_front_app/api/routes/auth/oauth2/api_oauth2_google.dart';
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_google.dart';
 import 'package:area_front_app/components/dialogs/custom_dialog.dart';
 
 class LoginPage extends StatefulWidget {

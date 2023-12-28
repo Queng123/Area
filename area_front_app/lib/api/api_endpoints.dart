@@ -12,4 +12,6 @@ class ApiRoutes {
   static const String username = 'user/';
   static const String deleteAccount = 'user/';
   static const String userServices = 'user/services';
+  static const String authGithub = 'auth/github/callback';
+  static const String authorizeGithub = 'https://github.com/login/oauth/authorize?';
 }

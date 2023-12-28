@@ -1,6 +1,8 @@
+import 'package:area_front_app/api/routes/services/api_user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:area_front_app/components/oauth2_service_box.dart';
-import 'package:area_front_app/components/profile_data.dart';
+import 'package:area_front_app/models/profile_data.dart';
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_github.dart';
 
 class OAuth2ServicesPage extends StatefulWidget {
   const OAuth2ServicesPage({super.key});
@@ -84,7 +86,10 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    powerSwitchChanged(value, index);
+                    if (myOAuth2Services[index][0] == "Github") {
+                      ApiGitHub().authenticateWithGitHub();
+                      powerSwitchChanged(true, index);
+                    }
                   },
                   child: const Text('Connect'),
                 ),
@@ -109,7 +114,12 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    powerSwitchChanged(value, index);
+                    ApiUserServices.deleteService(myOAuth2Services[index][0])
+                        .then((value) {
+                      if (value == 200) {
+                        powerSwitchChanged(false, index);
+                      }
+                    });
                   },
                   child: const Text('Disconnect'),
                 ),

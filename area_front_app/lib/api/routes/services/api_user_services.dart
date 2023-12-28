@@ -28,4 +28,22 @@ class ApiUserServices {
           'Error while requesting ${ApiRoutes.userServices}: $error');
     }
   }
+
+  static Future<int> deleteService(String serviceName) async {
+
+    if (serviceName != "Github" && serviceName != "Google" && serviceName != "Discord" && serviceName != "Steam") {
+      return 400;
+    }
+
+    final Map<String, dynamic> requestBody = {
+      'service': serviceName,
+    };
+    try {
+      final http.Response response = await ApiRequests.deleteWithBody(
+          ApiRoutes.userServices, requestBody);
+      return response.statusCode;
+    } catch (error) {
+      throw Exception('Error while requesting ${ApiRoutes.loginEmail} : $error');
+    }
+  }
 }

@@ -38,4 +38,16 @@ class ApiRequests {
       throw Exception('Error while requesting $apiUrl : $error');
     }
   }
+
+  static Future<http.Response> deleteWithBody(
+      String route, Map<String, dynamic> body) async {
+    final Uri apiUrl = Uri.parse('${ApiRoutes.baseUrl}$route');
+
+    try {
+      final http.Response response = await http.delete(apiUrl, body: body);
+      return response;
+    } catch (error) {
+      throw Exception('Error while requesting $apiUrl : $error');
+    }
+  }
 }
