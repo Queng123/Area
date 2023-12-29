@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:area_front_app/components/oauth2_service_box.dart';
 import 'package:area_front_app/models/profile_data.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_github.dart';
+import 'package:area_front_app/components/mini_dashboard.dart';
 
 class OAuth2ServicesPage extends StatefulWidget {
   const OAuth2ServicesPage({super.key});
@@ -17,11 +18,13 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     username: "Loading...",
   );
   static const String oAuth2ConnectText = "OAuth2 Connect";
+  static const String areaText = "Area";
 
   final double horizontalPadding = 40;
   final double verticalPadding = 25;
 
   bool isShowOAuth2Services = false;
+  bool isShowMiniDash = true;
 
   List myOAuth2Services = [
     ["Github", "lib/images/github.png"],
@@ -204,10 +207,21 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     onPressed: () {
                       setState(() {
                         isShowOAuth2Services = !isShowOAuth2Services;
+                        isShowMiniDash = false;
                       });
                     },
                   ),
                 ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Text(
+                "Connect your OAuth2 services to Area",
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey.shade800,
+                ),
               ),
             ),
             const SizedBox(height: 10),
@@ -219,6 +233,70 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
               ),
             ),
             if (isShowOAuth2Services) buildOAuth2ServicesGrid(),
+            const SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    areaText,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  IconButton(
+                    icon: isShowMiniDash
+                        ? const Icon(Icons.remove)
+                        : const Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        isShowMiniDash = !isShowMiniDash;
+                        isShowOAuth2Services = false;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Text(
+                "Manage your Area",
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              child: Divider(
+                thickness: 1,
+                color: Color.fromRGBO(66, 66, 66, 1),
+              ),
+            ),
+            if (isShowMiniDash)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    MiniDashBoard(
+                      title: "List of Areas",
+                      onTap: () {
+                        Navigator.pushNamed(context, '/dashboard');
+                      },
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),

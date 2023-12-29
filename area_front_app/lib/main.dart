@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:area_front_app/pages/setting/setting_page.dart';
 import 'package:area_front_app/pages/setting/about_us.dart';
 import 'package:area_front_app/pages/splash_page.dart';
+import 'package:area_front_app/pages/home/dashboard_page.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -40,6 +41,8 @@ class MyApp extends StatelessWidget {
                 return const SettingPage();
               case '/aboutus':
                 return const AboutUsPage();
+              case '/dashboard':
+                return const DashBoardPage();
               default:
                 return const LoginPage();
             }

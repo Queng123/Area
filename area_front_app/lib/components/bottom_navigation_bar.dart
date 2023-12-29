@@ -19,6 +19,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       if (_selectedIndex == 3) {
         Navigator.pushNamed(context, '/setting');
       }
+      if (_selectedIndex == 2) {
+        Navigator.pushNamed(context, '/dashboard');
+      }
     });
   }
 
