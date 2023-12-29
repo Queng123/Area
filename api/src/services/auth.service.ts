@@ -43,6 +43,9 @@ export class AuthService {
         .select('user_id, provider_id')
         .eq('user_id', user.data.user.email)
         .eq('provider_id', 'Github');
+    if (service.data !== null) {
+        return [409, 'error, User already connected with github'];
+    }
     if (!req.user) {
         return [409, 'error, no user found'];
     }
