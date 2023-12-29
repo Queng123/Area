@@ -58,4 +58,17 @@ export class ReactionsService {
         return [error.status, error.message];
     }
   }
+
+  async deleteReaction(reactionName: string): Promise<[number, string]> {
+    try {
+      const response = await supabase.from('reaction').delete().match({ name: reactionName });
+
+      if (response.error) {
+          throw response.error;
+      }
+      return [200, 'success, reaction deleted'];
+    } catch (error) {
+        return [error.status, error.message];
+    }
+  }
 }

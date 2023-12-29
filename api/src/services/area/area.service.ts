@@ -61,4 +61,66 @@ export class AreaService {
         return [error.status, error.message];
     }
   }
+
+  async getAreas(): Promise<[number, any]> {
+    try {
+      const currentUser = await supabase.auth.getUser();
+      if (currentUser.error) {
+        return [401, 'error, User not logged in'];
+      }
+      const area = await supabase.from('area').select('*').eq('user_id', currentUser.data.user.email);
+      if (area.error) {
+        throw area.error;
+      }
+      if (area.data.length === 0) {
+        return [404, 'error, No areas found'];
+      }
+      return [200, area.data];
+    } catch (error) {
+        return [error.status, error.message];
+    }
+  }
+
+  async deleteArea(action: string, reaction: string): Promise<[number, string]> {
+    try {
+      const user = await supabase.auth.getUser();
+      if (user.error) {
+        return [401, 'error, User not logged in'];
+      }
+      const area = await supabase.from('area').select('*').eq('user_id', user.data.user.email);
+      if (area.error) {
+        throw area.error;
+      }
+      let areaId: string;
+      for (let i = 0; i < area.data.length; i++) {
+        if (area.data[i].action_id === action && area.data[i].reaction_id === reaction) {
+          areaId = area.data[i].id;
+        }
+      }
+      if (!areaId) {
+        return [404, 'error, Area not found'];
+      }
+      const actionUrl = await supabase.from('action').select('creation_url').eq('name', action);
+
+      const res = await fetch(actionUrl.data[0].creation_url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      let loadAction = await res.json();
+      if (loadAction.message === 'error, User not logged in') {
+        loadAction.status = 401;
+        throw loadAction;
+      }
+      const response = await supabase.from('area').delete().match({ id: areaId });
+      if (response.error) {
+          throw response.error;
+      }
+      // TODO: delete reaction we will have area with provider reaction
+      return [200, 'success, Area deleted'];
+    } catch (error) {
+        return [error.status, error.message];
+    }
+  }
 }

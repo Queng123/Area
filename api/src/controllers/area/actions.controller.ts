@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Post, Req, Res, Delete } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ActionsService } from '../../services/area/actions.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -54,6 +54,42 @@ export class ActionsController {
   async starAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
       const [statusCode, message] = await this.actionsService.starAction(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Delete('star')
+  @ApiOperation({ summary: 'Unstar action' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, action unstarred',
+  })
+  async unstarAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.actionsService.unstarAction(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Delete(':actionName')
+  @ApiOperation({ summary: 'Delete action' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, action deleted',
+  })
+  async deleteAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.actionsService.deleteAction(request.params.actionName);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
       return res.status(statusCode).json({ message });

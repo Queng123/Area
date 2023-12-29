@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Post, Req, Res, Query } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Post, Req, Res, Query, Delete } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ReactionsService } from '../../services/area/reactions.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -54,6 +54,24 @@ export class ReactionsController {
   async sendMail(@Res() res: Response, @Query('email') email, @Query('action') action ): Promise<Response> {
     try {
       const [statusCode, message] = await this.reactionsService.sendMail(email, action);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
+
+  @Delete(':reactionName')
+  @ApiOperation({ summary: 'Delete reaction' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, reaction deleted',
+  })
+  async deleteReaction(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.reactionsService.deleteReaction(request.params.reactionName);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
       return res.status(statusCode).json({ message });
