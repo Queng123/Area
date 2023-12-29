@@ -184,15 +184,26 @@ export class UserService {
   }
 
   async deleteUserProvider(body: any): Promise<[number, string]> {
-    console.log(body);
     const provider = body.service;
     try {
       const user = await supabase.auth.getUser();
       if (!user.data.user) {
         return [409, 'error, User not logged in'];
       }
-      console.log(user.data.user.email, provider);
-      const response = await supabase.from('user_provider').delete().eq('user_id', user.data.user.email).eq('provider_id', provider);
+      const credentials = await supabase.from('user_provider')
+        .select('*')
+        .eq('user_id', user.data.user.email)
+        .eq('provider_id', provider);
+      if (credentials.error) {
+        throw credentials.error;
+      }
+      if (credentials.data.length === 0) {
+        return [409, 'error, User not connected to this provider'];
+      }
+      const response = await supabase.from('user_provider')
+        .delete()
+        .eq('user_id', user.data.user.email)
+        .eq('provider_id', provider);
       if (response.error) {
         throw response.error;
       }
