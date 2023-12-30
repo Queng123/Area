@@ -1,4 +1,4 @@
-import 'package:area_front_app/api/routes/api_delete_account.dart';
+import 'package:area_front_app/api/routes/profile/api_delete_account.dart';
 import 'package:flutter/material.dart';
 import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:area_front_app/api/routes/auth/api_logout.dart';

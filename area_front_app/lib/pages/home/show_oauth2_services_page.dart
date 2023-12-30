@@ -16,6 +16,14 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
   static const String welcomeText = "Welcome,";
   late Profile userProfile = Profile(
     username: "Loading...",
+    profilePic:
+        'https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg',
+    listAreas: [
+      {
+        'action_id': 'Loading...',
+        'reaction_id': 'Loading...',
+      },
+    ],
   );
   static const String oAuth2ConnectText = "OAuth2 Connect";
   static const String areaText = "Area";
@@ -170,10 +178,18 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     ),
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.circle,
-                    color: Colors.grey.shade800,
-                    size: 35,
+                  CircleAvatar(
+                    backgroundColor: Colors.grey.shade800,
+                    radius: 17.5,
+                    child: ClipOval(
+                      child: Image.network(
+                        userProfile
+                            .profilePic,
+                        width: 35,
+                        height: 35,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -289,7 +305,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     MiniDashBoard(
-                      title: "List of Areas",
+                      listAreas: userProfile.listAreas,
                       onTap: () {
                         Navigator.pushNamed(context, '/dashboard');
                       },

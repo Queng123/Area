@@ -14,4 +14,7 @@ class ApiRoutes {
   static const String userServices = 'user/services';
   static const String authGithub = 'auth/github/callback';
   static const String authorizeGithub = 'https://github.com/login/oauth/authorize?';
+  static const String actions = 'actions';
+  static const String reactions = 'reactions';
+  static const String area = 'area/';
 }

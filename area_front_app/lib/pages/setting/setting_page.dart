@@ -15,10 +15,8 @@ class _SettingPageState extends State<SettingPage> {
   bool _isSwitched = true;
   late Profile userProfile = Profile(
     username: "Loading...",
+    profilePic: "https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg",
   );
-  final String _userProfilePic =
-      "https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg";
-
   @override
   void initState() {
     super.initState();
@@ -44,6 +42,15 @@ class _SettingPageState extends State<SettingPage> {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/home');
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.black,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -51,7 +58,7 @@ class _SettingPageState extends State<SettingPage> {
           children: [
             SimpleUserCard(
               userName: "@${userProfile.username}",
-              userProfilePic: NetworkImage(_userProfilePic),
+              userProfilePic: NetworkImage(userProfile.profilePic),
             ),
             SettingsGroup(
               settingsGroupTitle: "General",
