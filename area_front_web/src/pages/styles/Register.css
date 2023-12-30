@@ -5,7 +5,7 @@ body {
 .square {
     align-items: center;
     width: 80%;
-    max-width: 400px;
+    max-width: 600px;
     margin: 0 auto;
     height: auto;
     background-color: #E0E0E0;
@@ -25,13 +25,20 @@ body {
     height: auto;
 }
 
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 .square input {
     width: 50%;
     padding: 3%;
     border: 3px solid #ffffff;
     border-radius: 5px;
     background-color: #F5F5F5;
-    margin-bottom: 5px;
+    margin-top: 10px;
 }
 
 .register-button {
@@ -65,3 +72,12 @@ body {
     font-weight: bold;
 }
 
+.error {
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 5px;
+    @media (max-width: 600px) {
+        font-size: 8px;
+    }
+}
