@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import './styles/Register.css';
 import logo from '../assets/logo.png';
 
 export function Register() {
+    const navigate = useNavigate();
+
+    const LoginRedirection = () => {
+        navigate('/login');
+    };
 
     return (
         <div className='body'>
@@ -15,6 +22,7 @@ export function Register() {
                 <button className="register-button">Register</button>
                 <div className="text-already-account">
                     Have an account?
+                    <span className="blue-text-link" onClick={LoginRedirection}>Login</span>
                     <span className="blue-text-link">Login</span>
                 </div>
             </div>
