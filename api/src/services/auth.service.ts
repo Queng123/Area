@@ -13,7 +13,7 @@ export class AuthService {
                             .select('user_id, provider_id')
                             .eq('user_id', user.data.user.email)
                             .eq('provider_id', 'Google');
-    if (service.data !== null) {
+    if (service.data.length !== 0) {
       return [409, 'error, User already connected with google'];
     }
     if (!req.user) {
@@ -43,7 +43,7 @@ export class AuthService {
         .select('user_id, provider_id')
         .eq('user_id', user.data.user.email)
         .eq('provider_id', 'Github');
-    if (service.data !== null) {
+    if (service.data.length !== 0) {
         return [409, 'error, User already connected with github'];
     }
     if (!req.user) {
