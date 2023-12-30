@@ -1,18 +1,19 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { Splash } from './pages/Splash';
 import { Register } from './pages/Register';
-import { Login } from './pages/Login';
-import { Home } from './pages/Home';
-import { NotFound } from './pages/NotFound';
+
+function NotFound() {
+    return (
+        <div>
+            <h2>Invalid URL</h2>
+        </div>
+    )
+}
 
 export function RoutesManager() {
     return (
         <Routes>
-            <Route path="/" element={<Splash />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Register />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );

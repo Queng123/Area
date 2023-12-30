@@ -1,10 +1,10 @@
-import { HashRouter } from 'react-router-dom';
 import { RoutesManager } from './Routes';
+import { BrowserRouter } from 'react-router-dom';
 
 export function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       {RoutesManager()}
-    </HashRouter>
+    </BrowserRouter>
   );
 }
