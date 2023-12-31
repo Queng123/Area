@@ -10,17 +10,15 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (_selectedIndex == 3) {
-        Navigator.pushNamed(context, '/setting');
-      }
-      if (_selectedIndex == 2) {
-        Navigator.pushNamed(context, '/dashboard');
+      List<String> routeNames = ['/home', '/profile', '/dashboard', '/setting'];
+
+      if (index >= 1 && index < routeNames.length) {
+        Navigator.pushNamed(context, routeNames[index]);
       }
     });
   }

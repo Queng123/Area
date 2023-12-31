@@ -1,3 +1,4 @@
+import 'package:area_front_app/pages/home/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:area_front_app/pages/auth/login_page.dart';
 import 'package:area_front_app/pages/auth/register_page.dart';
@@ -43,6 +44,8 @@ class MyApp extends StatelessWidget {
                 return const AboutUsPage();
               case '/dashboard':
                 return const DashBoardPage();
+              case '/profile':
+                return const ProfilePage();
               default:
                 return const LoginPage();
             }

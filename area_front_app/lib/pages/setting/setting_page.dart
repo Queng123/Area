@@ -15,7 +15,8 @@ class _SettingPageState extends State<SettingPage> {
   bool _isSwitched = true;
   late Profile userProfile = Profile(
     username: "Loading...",
-    profilePic: "https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg",
+    profilePic:
+        "https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg",
   );
   @override
   void initState() {
@@ -56,9 +57,23 @@ class _SettingPageState extends State<SettingPage> {
         padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
-            SimpleUserCard(
-              userName: "@${userProfile.username}",
+            const SizedBox(height: 20),
+            BigUserCard(
+              backgroundColor: Colors.purple[300],
+              userName: userProfile.username,
               userProfilePic: NetworkImage(userProfile.profilePic),
+              cardActionWidget: SettingsItem(
+                icons: Icons.edit,
+                iconStyle: IconStyle(
+                  withBackground: true,
+                  backgroundColor: Colors.purple[600],
+                ),
+                title: "Account",
+                subtitle: "Modify your profile",
+                onTap: () {
+                  Navigator.pushNamed(context, '/profile');
+                },
+              ),
             ),
             SettingsGroup(
               settingsGroupTitle: "General",
@@ -93,7 +108,7 @@ class _SettingPageState extends State<SettingPage> {
                   },
                   icons: Icons.info_rounded,
                   iconStyle: IconStyle(
-                    backgroundColor: Colors.purple,
+                    backgroundColor: Colors.purple[600],
                   ),
                   title: 'About us',
                   subtitle: "Learn more about Area",
