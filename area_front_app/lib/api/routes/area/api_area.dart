@@ -26,13 +26,13 @@ class ApiArea {
 
   static Future<List<Map<String, String>>> getArea() async {
     final http.Response response = await ApiRequests.get(ApiRoutes.area);
+    List<Map<String, String>> area = [];
 
     if (response.statusCode == 200) {
       try {
         final List<dynamic> jsonResponse = jsonDecode(response.body)[1];
 
-        final List<Map<String, String>> area =
-            jsonResponse.map<Map<String, String>>((dynamic item) {
+        area = jsonResponse.map<Map<String, String>>((dynamic item) {
           return {
             'action_id': item['action_id'].toString(),
             'reaction_id': item['reaction_id'].toString(),
@@ -40,11 +40,9 @@ class ApiArea {
         }).toList();
         return area;
       } catch (e) {
-        throw Exception('Failed to parse reaction data: $e');
+        return area;
       }
-    } else {
-      throw Exception(
-          'Failed to load reaction. Status code: ${response.statusCode}');
     }
+    return area;
   }
 }
