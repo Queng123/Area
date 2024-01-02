@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { Register } from './pages/Register';
 import { Login } from './pages/Login';
+import { Home } from './pages/Home';
 
 function NotFound() {
     return (
@@ -16,6 +17,7 @@ export function RoutesManager() {
         <Routes>
             <Route path="/" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
             <Route path="*" element={<NotFound />} />
         </Routes>
     );
