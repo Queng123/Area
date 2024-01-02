@@ -85,6 +85,10 @@ export function Login() {
         navigate('/');
     };
 
+    const ForgotPassword = () => {
+        navigate('/login/reset-password');
+    };
+
     return (
         <div className='body'>
             <div className='square'>
@@ -109,7 +113,7 @@ export function Login() {
                         onChange={handleInputChange}
                     />
                     <span className="error">{errors.password}</span>
-                    <span className="forgot-password">Forgot Password?</span>
+                    <span className="forgot-password" onClick={ForgotPassword}>Forgot Password?</span>
                     <button className="login-button" type="submit">Login</button>
                 </form>
                 <div className="separator-text">Or continue with</div>
