@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import './styles/Login.css';
+import logo from '../assets/logo.png';
+import googleLogo from '../assets/googleLogo.png';
 
 import './styles/Login.css';
 import logo from '../assets/logo.png';
 import googleLogo from '../assets/googleLogo.png';
 
 export function Login() {
+    const navigate = useNavigate();
+
+    const RegisterRedirection = () => {
+        navigate('/');
+    };
+
     return (
         <div className='body'>
             <div className='square'>
@@ -29,7 +40,7 @@ export function Login() {
                 <img src={googleLogo} alt="Google Logo" className="google-logo" />
                 <div className="text-already-account">
                     Not a member?
-                    <span className="blue-text-link" >Register here</span>
+                    <span className="blue-text-link" onClick={RegisterRedirection}>Register here</span>
                 </div>
             </div>
         </div>
