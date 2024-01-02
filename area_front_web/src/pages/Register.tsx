@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios, { AxiosError } from 'axios';
 
 import './styles/Register.css';
 import logo from '../assets/logo.png';
 
 export function Register() {
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
 
     const initialFormData = {
@@ -23,13 +25,17 @@ export function Register() {
         confirmPassword: '',
     });
 
+    const [errorMessage, setErrorMessage] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        console.log(`${BASE_URL}/user/register/email`);
         const newErrors = { ...errors };
 
         if (formData.username === '') {
@@ -61,8 +67,38 @@ export function Register() {
         }
 
         if (newErrors.username === '' && newErrors.email === '' && newErrors.password === '' && newErrors.confirmPassword === '') {
-            console.log("Is Valid");
-            setFormData(initialFormData);
+            setErrorMessage('');
+            setSuccessMessage('');
+            try {
+                const requestData = {
+                    email: formData.email,
+                    password: formData.password,
+                    username: formData.username,
+                };
+                const response = await axios.post(`${BASE_URL}/user/register/email`, requestData);
+
+                console.log('"Server response:', response.data);
+                setSuccessMessage('Your account has been created. An email confirmation has been sent');
+
+                setFormData(initialFormData);
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    const axiosError = error as AxiosError;
+                    console.error('Error during POST request:', axiosError);
+
+                    if (axiosError.response) {
+                        if (axiosError.response.status === 404) {
+                            setErrorMessage('An error occured with the server, Please try again later');
+                        } else if (axiosError.response.status === 409) {
+                            setErrorMessage('This email is already used');
+                        } else {
+                            setErrorMessage('An error occurred. Please try again later');
+                        }
+                    } else {
+                        setErrorMessage('An error occurred. Please try again later');
+                    }
+                }
+            }
         }
         setErrors(newErrors);
     };
@@ -75,6 +111,8 @@ export function Register() {
         <div className='body'>
             <div className='square'>
                 <img src={logo} alt="Logo" className="logo" />
+                {successMessage && <div className="success-message">{successMessage}</div>}
+                {errorMessage && <div className="error-message">{errorMessage}</div>}
                 <form className="form" onSubmit={handleSubmit}>
                     <input
                         type="text"
