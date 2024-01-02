@@ -8,7 +8,8 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse
+  ApiResponse,
+  ApiBody
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { AdminService } from '../services/admin.service';
@@ -23,6 +24,23 @@ export class AdminController {
   @ApiResponse({
     status: 200,
     description: 'User account deleted.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User not found.',
+  })
+  @ApiBody({
+    description: 'Id of the user to delete.',
+    schema: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+          example: '123456789',
+        },
+      },
+      required: ['id'],
+    },
   })
   async delete(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {

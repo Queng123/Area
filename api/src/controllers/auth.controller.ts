@@ -10,11 +10,13 @@ import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import {
   ApiOperation,
-  ApiResponse
+  ApiResponse,
+  ApiTags
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -32,6 +34,14 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User not logged in.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
   })
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {
@@ -57,6 +67,14 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User not logged in.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
   })
   async githubAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {

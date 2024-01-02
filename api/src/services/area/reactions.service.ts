@@ -53,7 +53,7 @@ export class ReactionsService {
         throw res.error;
       }
 
-      return [200, 'success, email sent'];
+      return [201, 'success, email sent'];
     } catch (error) {
         return [error.status, error.message];
     }

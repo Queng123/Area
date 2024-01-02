@@ -16,7 +16,7 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
-  ApiParam
+  ApiBody
 } from '@nestjs/swagger';
 
 @Controller('user')
@@ -29,6 +29,31 @@ export class UserController {
   @ApiResponse({
     status: 201,
     description: 'User successfully registered.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already exists.',
+  })
+  @ApiBody({
+    description: 'Email, password and username of the user to register.',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'test@test.test',
+        },
+        password: {
+          type: 'string',
+          example: 'password',
+        },
+        username: {
+          type: 'string',
+          example: 'jean',
+        },
+      },
+      required: ['email', 'password'],
+    },
   })
   async registerEmail(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
@@ -47,6 +72,31 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Wrong email or password. Or user not verified.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already logged in.',
+  })
+  @ApiBody({
+    description: 'Email and password of the user to log in.',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'test@test.test',
+        },
+        password: {
+          type: 'string',
+          example: 'password',
+        },
+      },
+      required: ['email', 'password'],
+    },
   })
   async loginEmail(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
@@ -84,6 +134,10 @@ export class UserController {
     status: 200,
     description: 'User successfully logged out.',
   })
+  @ApiResponse({
+    status: 409,
+    description: 'User not logged in.',
+  })
   async logout(@Res() res: Response): Promise<Response> {
     try {
       const [statusCode, message] = await this.userService.logoutUser();
@@ -101,6 +155,19 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Password reset email sent.',
+  })
+  @ApiBody({
+    description: 'Email of the user to reset the password of.',
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'test@test.test',
+        },
+      },
+      required: ['email'],
+    },
   })
   async resetPassword(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
@@ -120,6 +187,19 @@ export class UserController {
     status: 200,
     description: 'Password updated.',
   })
+  @ApiBody({
+    description: 'New password of the user.',
+    schema: {
+      type: 'object',
+      properties: {
+        password: {
+          type: 'string',
+          example: 'new password',
+        },
+      },
+      required: ['password'],
+    },
+  })
   async updatePassword(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
       const [statusCode, message] = await this.userService.updatePassword(request.body);
@@ -136,6 +216,10 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'User account deleted.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User not logged in.',
   })
   async delete(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
@@ -154,6 +238,10 @@ export class UserController {
     status: 200,
     description: 'Username',
   })
+  @ApiResponse({
+    status: 409,
+    description: 'User not logged in.',
+  })
   async getUserName(@Res() res: Response): Promise<Response> {
     try {
       const [statusCode, message] = await this.userService.getUserName();
@@ -171,6 +259,10 @@ export class UserController {
     status: 200,
     description: 'User services status',
   })
+  @ApiResponse({
+    status: 409,
+    description: 'User not logged in.',
+  })
   async getUserService(@Res() res: Response): Promise<Response> {
     try {
       const [statusCode, message] = await this.userService.getUserService();
@@ -184,15 +276,26 @@ export class UserController {
 
   @Delete('services')
   @ApiOperation({ summary: 'Deletes a user service' })
-  @ApiParam({
-    name: 'service',
-    type: String,
-    description: 'Service to delete',
-    required: true,
-  })
   @ApiResponse({
     status: 200,
     description: 'User service deleted',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User not logged in.',
+  })
+  @ApiBody({
+    description: 'Name of the service to delete',
+    schema: {
+      type: 'object',
+      properties: {
+        service: {
+          type: 'string',
+          example: 'github',
+        },
+      },
+      required: ['service'],
+    },
   })
   async deleteUserService(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {

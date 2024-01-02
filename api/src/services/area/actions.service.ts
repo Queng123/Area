@@ -91,7 +91,7 @@ export class ActionsService {
     }
   }
 
-  async unstarAction(body: any): Promise<[number, string]> {
+  async unstarAction(): Promise<[number, string]> {
     try {
       const user = await supabase.auth.getUser();
 

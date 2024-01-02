@@ -1,7 +1,7 @@
 import { Controller, Get, HttpStatus, Post, Req, Res, Delete } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ActionsService } from '../../services/area/actions.service';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
 @Controller('actions')
 @ApiTags('actions')
@@ -13,6 +13,34 @@ export class ActionsController {
   @ApiResponse({
     status: 201,
     description: 'success, action created',
+  })
+  @ApiBody({
+    description: 'Name, description, url and provider of the action to register.',
+    schema: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          example: 'star',
+          description: 'Name of the action',
+        },
+        description: {
+          type: 'string',
+          example: 'Star a repository',
+          description: 'Description of the action',
+        },
+        url: {
+          type: 'string',
+          example: 'http://api:8080/action/star',
+          description: 'Url of the action',
+        },
+        provider: {
+          type: 'string',
+          example: 'Github',
+        },
+      },
+      required: ['name', 'description', 'url'],
+    },
   })
   async addAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
@@ -51,6 +79,24 @@ export class ActionsController {
     status: 201,
     description: 'success, action starred',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'User not logged in.',
+  })
+  @ApiBody({
+    description: 'Webhook endpoint of the action to star.',
+    schema: {
+      type: 'object',
+      properties: {
+        webhookEndpoint: {
+          type: 'string',
+          example: 'http://api:8080/reaction/email',
+          description: 'url for the reaction',
+        },
+      },
+      required: ['webhookEndpoint'],
+    },
+  })
   async starAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
       const [statusCode, message] = await this.actionsService.starAction(request.body);
@@ -69,9 +115,13 @@ export class ActionsController {
     status: 201,
     description: 'success, action unstarred',
   })
+  @ApiResponse({
+    status: 401,
+    description: 'User not logged in.',
+  })
   async unstarAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
-      const [statusCode, message] = await this.actionsService.unstarAction(request.body);
+      const [statusCode, message] = await this.actionsService.unstarAction();
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
       return res.status(statusCode).json({ message });
@@ -84,7 +134,7 @@ export class ActionsController {
   @Delete(':actionName')
   @ApiOperation({ summary: 'Delete action' })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'success, action deleted',
   })
   async deleteAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
