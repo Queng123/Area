@@ -16,7 +16,7 @@ class MiniDashBoard extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double containerWidth = screenWidth * 0.88;
-    double containerHeight = screenHeight * 0.45;
+    double containerHeight = screenHeight * 0.35;
 
     return GestureDetector(
       onTap: onTap,
@@ -68,13 +68,14 @@ class MiniDashBoard extends StatelessWidget {
                                           TextButton(
                                             onPressed: () {
                                               ApiArea.deleteArea(
-                                                  area['action_id']!,
-                                                  area['reaction_id']!).then((value) {
+                                                      area['action_id']!,
+                                                      area['reaction_id']!)
+                                                  .then((value) {
                                                 if (value == 200) {
                                                   Navigator.of(context)
                                                       .pop(true);
                                                 }
-                                                  });
+                                              });
                                             },
                                             child: const Text('Delete'),
                                           ),

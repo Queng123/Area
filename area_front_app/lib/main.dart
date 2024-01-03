@@ -8,6 +8,7 @@ import 'package:area_front_app/pages/setting/setting_page.dart';
 import 'package:area_front_app/pages/setting/onboarding_page.dart';
 import 'package:area_front_app/pages/splash_page.dart';
 import 'package:area_front_app/pages/home/dashboard_page.dart';
+import 'package:area_front_app/pages/copyarea/copy_area_page.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
@@ -46,6 +47,8 @@ class MyApp extends StatelessWidget {
                 return const DashBoardPage();
               case '/profile':
                 return const ProfilePage();
+              case '/copyarea':
+                return const CopyArea();
               default:
                 return const LoginPage();
             }

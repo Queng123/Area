@@ -27,13 +27,14 @@ class OAuth2ServiceBox extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 25.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
                 iconPath,
                 height: 65,
                 color: powerOn ? Colors.white : Colors.grey.shade700,
               ),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   Expanded(

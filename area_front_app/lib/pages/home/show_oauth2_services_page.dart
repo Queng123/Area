@@ -4,6 +4,7 @@ import 'package:area_front_app/components/oauth2_service_box.dart';
 import 'package:area_front_app/models/profile_data.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_github.dart';
 import 'package:area_front_app/components/mini_dashboard.dart';
+import 'package:area_front_app/pages/copyarea/copy_area_page.dart';
 
 class OAuth2ServicesPage extends StatefulWidget {
   const OAuth2ServicesPage({super.key});
@@ -33,6 +34,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
 
   bool isShowOAuth2Services = false;
   bool isShowMiniDash = true;
+  bool isShowCopyArea = false;
 
   List myOAuth2Services = [
     ["Github", "lib/images/github.png"],
@@ -68,7 +70,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
         padding: const EdgeInsets.symmetric(horizontal: 25),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 1 / 1.3,
+          childAspectRatio: 1 / 1.1,
         ),
         itemBuilder: (context, index) {
           return buildOAuth2ServiceBox(index);
@@ -183,8 +185,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     radius: 17.5,
                     child: ClipOval(
                       child: Image.network(
-                        userProfile
-                            .profilePic,
+                        userProfile.profilePic,
                         width: 35,
                         height: 35,
                         fit: BoxFit.cover,
@@ -224,6 +225,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                       setState(() {
                         isShowOAuth2Services = !isShowOAuth2Services;
                         isShowMiniDash = false;
+                        isShowCopyArea = false;
                       });
                     },
                   ),
@@ -249,7 +251,6 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
               ),
             ),
             if (isShowOAuth2Services) buildOAuth2ServicesGrid(),
-            const SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Row(
@@ -271,6 +272,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                       setState(() {
                         isShowMiniDash = !isShowMiniDash;
                         isShowOAuth2Services = false;
+                        isShowCopyArea = false;
                       });
                     },
                   ),
@@ -312,6 +314,58 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     ),
                   ],
                 ),
+              ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Copy Area",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.grey.shade800,
+                    ),
+                  ),
+                  IconButton(
+                    icon: isShowCopyArea
+                        ? const Icon(Icons.remove)
+                        : const Icon(Icons.add),
+                    onPressed: () {
+                      setState(() {
+                        isShowCopyArea = !isShowCopyArea;
+                        isShowOAuth2Services = false;
+                        isShowMiniDash = false;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Text(
+                "Copy an Area from another configuration",
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.grey.shade800,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40.0),
+              child: Divider(
+                thickness: 1,
+                color: Color.fromRGBO(66, 66, 66, 1),
+              ),
+            ),
+            if (isShowCopyArea)
+              SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    0.43,
+                child: const CopyArea(),
               ),
           ],
         ),
