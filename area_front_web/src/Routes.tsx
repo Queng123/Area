@@ -4,14 +4,7 @@ import { Register } from './pages/Register';
 import { Login } from './pages/Login';
 import { Home } from './pages/Home';
 import { Reset_Password } from './pages/Reset_Password';
-
-function NotFound() {
-    return (
-        <div>
-            <h2>Invalid URL</h2>
-        </div>
-    )
-}
+import { NotFound } from './pages/NotFound';
 
 export function RoutesManager() {
     return (
