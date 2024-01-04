@@ -50,12 +50,12 @@ export class ReactionsService {
         html: html
       });
       if (res.error) {
-        throw res.error;
+        throw [500, res.error.message]
       }
 
       return [201, 'success, email sent'];
     } catch (error) {
-        return [error.status, error.message];
+        return error;
     }
   }
 

@@ -148,4 +148,39 @@ export class ActionsController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Post('email')
+  @ApiOperation({ summary: 'Check if email is received' })
+  @ApiResponse({
+    status: 200,
+    description: 'success, email received',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'User not logged in.',
+  })
+  @ApiBody({
+    description: 'Webhook endpoint of the action email.',
+    schema: {
+      type: 'object',
+      properties: {
+        webhookEndpoint: {
+          type: 'string',
+          example: 'http://api:8080/reaction/email',
+          description: 'url for the reaction',
+        },
+      },
+      required: ['webhookEndpoint'],
+    },
+  })
+  async receivedEmail(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.actionsService.receivedEmail(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message: message });
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+  }
 }

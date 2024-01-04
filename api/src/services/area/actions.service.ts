@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import supabase from '../../config/supabase.config';
 const axios = require('axios');
+import { google } from 'googleapis';
 
 @Injectable()
 export class ActionsService {
@@ -183,6 +184,88 @@ export class ActionsService {
       return [200, 'success, Action deleted'];
     } catch (error) {
         return [error.status, error.message];
+    }
+  }
+
+  async receivedEmail(body: any): Promise<[number, string]> {
+    try {
+      const user = await supabase.auth.getUser();
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET,
+        body.webhookEndpoint
+      );
+
+      if (user.error) {
+        return [401, 'error, User not logged in'];
+      }
+
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user.data.user.email);
+
+      let datas = {
+        lastEmail: null,
+      }
+      if (userDatas.data[0].datas !== null && userDatas.data[0].datas.lastEmail !== null) {
+        datas.lastEmail = userDatas.data[0].datas.lastEmail;
+      }
+
+      const credentials = await supabase.from('user_provider')
+        .select('token')
+        .eq('user_id', user.data.user.email)
+        .eq('provider_id', 'Google');
+
+      if (credentials.error) {
+        throw credentials.error;
+      }
+
+      const accessToken = credentials.data[0].token;
+      oauth2Client.setCredentials({ access_token: accessToken });
+
+      const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
+      const response = await gmail.users.messages.list({
+        userId: 'me',
+        q: 'is:unread in:inbox',
+      });
+      const messages = response.data.messages;
+
+      if (messages === undefined) {
+        return [200, 'success, no new email received'];
+      }
+      const messageId = messages[0].id;
+      const message = await gmail.users.messages.get({
+        userId: 'me',
+        id: messageId,
+      });
+      const timestamp = message.data.payload.headers.find((header) => header.name === 'Date').value;
+      if (datas.lastEmail !== null && datas.lastEmail === timestamp) {
+        return [200, 'success, no new email received'];
+      }
+      const url = body.webhookEndpoint + '?email=' + user.data.user.email + '&action=email';
+      console.log("ok");
+      const res = await axios.post(url, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status !== 201) {
+        const error = {
+          response: {
+            status: res.status,
+            data: {
+              statusText: res.statusText,
+            },
+          },
+        };
+        throw error;
+      }
+      await supabase.from('profile').update({ datas: {
+        lastEmail: timestamp,
+      } }).eq('email', user.data.user.email);
+      return [200, 'success, email received'];
+    } catch (error) {
+      return [error.response.status, error.response.statusText];
     }
   }
 }

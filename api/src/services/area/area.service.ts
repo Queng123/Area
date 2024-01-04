@@ -46,8 +46,9 @@ export class AreaService {
         body: JSON.stringify({ webhookEndpoint: reactionUrl.data[0].callback_url }),
       });
       let loadAction = await res.json();
-      if (loadAction.error) {
-        throw loadAction.error;
+      if (res.status !== 201) {
+        console.log(loadAction);
+        throw [res.status, loadAction.message];
       }
       let response = await supabase.from('area').insert([
           { action_id: action, reaction_id: reaction, user_id: user.data.user.email }
@@ -58,7 +59,7 @@ export class AreaService {
       }
       return [201, 'success, Area created'];
     } catch (error) {
-        return [error.status, error.message];
+        return error;
     }
   }
 
