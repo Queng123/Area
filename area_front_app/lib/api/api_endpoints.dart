@@ -18,6 +18,8 @@ class ApiRoutes {
   static const String actions = 'actions';
   static const String reactions = 'reactions';
   static const String area = 'area/';
+  static const String authGoogle = 'auth/google/callback';
+  static const String authorizeGoogle = 'https://accounts.google.com/o/oauth2/v2/auth?';
   static const String authSpotify = 'auth/spotify/callback';
   static const String authorizeSpotify =
       'https://accounts.spotify.com/authorize?';

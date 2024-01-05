@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:area_front_app/components/generic_button.dart';
 import 'package:area_front_app/components/styled_text_field.dart';
-import 'package:area_front_app/components/image_tile_blur.dart';
 import 'package:area_front_app/api/routes/auth/api_login.dart';
 import 'package:area_front_app/api/components/handler_validation_request.dart';
-import 'package:area_front_app/api/routes/auth/oauth2/api_auth_google.dart';
 import 'package:area_front_app/components/dialogs/custom_dialog.dart';
 
 class LoginPage extends StatefulWidget {
@@ -114,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
-                          'Or continue with',
+                          'Or',
                           style: TextStyle(color: Colors.grey[700]),
                         ),
                       ),
@@ -127,25 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        ApiOAuth2Google.getLinkOAuth2Google()
-                            .then((requestbody) {
-                          ApiOAuth2Google.redirection(requestbody);
-                        });
-                      },
-                      child: const ImageTileBlur(
-                        key: Key('google_image'),
-                        imagePath: 'lib/images/google.png',
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

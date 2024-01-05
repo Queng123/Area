@@ -5,6 +5,7 @@ import 'package:area_front_app/models/profile_data.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_github.dart';
 import 'package:area_front_app/components/mini_dashboard.dart';
 import 'package:area_front_app/pages/copyarea/copy_area_page.dart';
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_google.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_spotify.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_msteams.dart';
 
@@ -103,6 +104,10 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     Navigator.of(context).pop();
                     if (myOAuth2Services[index][0] == "Github") {
                       ApiGitHub().authenticateWithGitHub();
+                      powerSwitchChanged(true, index);
+                    }
+                    if (myOAuth2Services[index][0] == "Google") {
+                      ApiGoogle().authenticateWithGoogle();
                       powerSwitchChanged(true, index);
                     }
                     if (myOAuth2Services[index][0] == "Spotify") {
