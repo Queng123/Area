@@ -5,6 +5,7 @@ import 'package:area_front_app/models/profile_data.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_github.dart';
 import 'package:area_front_app/components/mini_dashboard.dart';
 import 'package:area_front_app/pages/copyarea/copy_area_page.dart';
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_spotify.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_msteams.dart';
 
 class OAuth2ServicesPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
   List myOAuth2Services = [
     ["Github", "lib/images/github.png"],
     ["Google", "lib/images/google.png"],
-    ["Discord", "lib/images/google.png"],
+    ["Spotify", "lib/images/spotify.png"],
     ["Teams", "lib/images/msteams.png"],
   ];
 
@@ -102,6 +103,10 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     Navigator.of(context).pop();
                     if (myOAuth2Services[index][0] == "Github") {
                       ApiGitHub().authenticateWithGitHub();
+                      powerSwitchChanged(true, index);
+                    }
+                    if (myOAuth2Services[index][0] == "Spotify") {
+                      ApiSpotify().authenticateWithSpotify();
                       powerSwitchChanged(true, index);
                     }
                     if (myOAuth2Services[index][0] == "Teams") {
@@ -368,8 +373,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
             ),
             if (isShowCopyArea)
               SizedBox(
-                height: MediaQuery.of(context).size.height *
-                    0.43,
+                height: MediaQuery.of(context).size.height * 0.43,
                 child: const CopyArea(),
               ),
           ],
