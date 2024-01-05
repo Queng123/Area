@@ -62,4 +62,38 @@ export class AuthService {
     }
     return [200, 'success, user connected with github'];
   }
+
+  async MSTeamsLogin(req): Promise<[number, string]> {
+    const user = await supabase.auth.getUser();
+
+    if (user.error) {
+        return [401, 'error, User not logged in'];
+    }
+
+    const service = await supabase.from('user_provider')
+        .select('user_id, provider_id')
+        .eq('user_id', user.data.user.email)
+        .eq('provider_id', 'MSTeams');
+    if (service.data.length !== 0) {
+        return [409, 'error, User already connected with MSTeams'];
+    }
+
+    if (!req.user) {
+        return [403, 'error, no user found'];
+    }
+
+    const { data, error } = await supabase.from('user_provider')
+      .insert([
+        {
+          user_id: user.data.user.email,
+          provider_id: 'MSTeams',
+          token: req.user
+        }
+      ]);
+    if (error) {
+        console.log(error);
+        return [500, 'error, something went wrong'];
+    }
+    return [200, 'success, user connected with MSTeams'];
+  }
 }
