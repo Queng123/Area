@@ -72,9 +72,9 @@ As we saw, the main purpose of the application is to allow users to create autom
 
 - **Github**
 - **Discord**
-- **Twitch**
+- **Spotify**
 - **Calendar**
-- **Steam**
+- **Youtube**
 
 
 #### Actions:
@@ -83,13 +83,13 @@ As we saw, the main purpose of the application is to allow users to create autom
   - Create a ticket
   - Create a PR
 
-- **Twitch**
-    - Twitch stream notification
+- **Spotify**
+    - Spotify like a song
 
 - **Calendar**
     - Meeting reminder
 
-- **Steam**
+- **Youtube**
     - Items price checker
     - Game price checker
 
@@ -97,17 +97,18 @@ As we saw, the main purpose of the application is to allow users to create autom
 
 - **Discord**
     - Send a message
-
+- **Mail**
+    - Send a mail
 
 #### AREA (Action-REAction Execution):
 
 ##### Github - Discord
-- **Action**: Création d'un ticket
-- **Action**: Création d'une PR
+- **Action**: Create a ticket
+- **Action**: Create a PR
 - **Reaction**: Message Discord
 
-##### Twitch - Discord
-- **Action**: Stream notification
+##### Spotify - Discord
+- **Action**: Like a song
 - **Reaction**: Message Discord
 
 ##### Github - Discord
@@ -118,12 +119,12 @@ As we saw, the main purpose of the application is to allow users to create autom
 - **Action**: Meeting reminder
 - **Reaction**: Message Discord
 
-##### Steam - Discord
-- **Action**: Items price checker
-- **Action**: Game price checker
+##### Youtube - Discord
+- **Action**: Like a video
+- **Action**: Dislike a video
 - **Reaction**: Message Discord
 
-##### Twitch - Mail
+##### Spotify - Mail
 - **Action**: Follow streamer
 - **Reaction**: Mail
 

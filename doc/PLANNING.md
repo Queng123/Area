@@ -68,14 +68,39 @@ This sprint will be considered as the MVP of the project. The MVP will be presen
 
 The goal of this sprint is to add advanced features to the project. This includes the following tasks:
 
-- [ ] Twitch service (OAuth2)
-- [ ] Steam service (OAuth2)
-- [ ] Calendar service (OAuth2)
-- [ ] Twitch action
-- [ ] Steam action
-- [ ] Calendar action
-- [ ] Discord reaction
-- [ ] Github action
+### Sprint 3 - Follow UP - 1/2 week(s)
+
+To see the project in progress: https://github.com/users/VyOk9/projects/20
+
+OAuth2 Services:
+- [ ] Twitch service (OAuth2) - Estimated time: 2 days - Assigned to: Queng
+- [ ] Youtube service (OAuth2) - Estimated time: 2 days - Assigned to: Queng
+- [ ] Calendar service (OAuth2) - Estimated time: 2 days - Assigned to: YungSnoww
+- [ ] Discord service (OAuth2) - Estimated time: 2 days - Assigned to: YungSnoww
+
+Actions:
+- [ ] Discord action - Estimated time: 2 days - Assigned to: YungSnoww
+- [ ] Twitch action - Estimated time: 2 days - Assigned to: Queng
+- [ ] Youtube action - Estimated time: 2 days - Assigned to: Queng
+- [ ] Calendar action - Estimated time: 2 days - Assigned to: YungSnoww
+
+Reactions:
+- [ ] Discord reaction - Estimated time: 2 days - Assigned to: YungSnoww
+- [ ] Twitch reaction - Estimated time: 2 days - Assigned to: Queng
+- [ ] Youtube reaction - Estimated time: 2 days - Assigned to: Queng
+- [ ] Calendar reaction - Estimated time: 2 days - Assigned to: YungSnoww
+
+Mobile Connect Providers (OAuth2):
+- [ ] Mobile connect provider (OAuth2) in mobile app - Estimated time: 2 days - Assigned to: VyOk
+- [ ] Web connect provider (OAuth2) in web app - Estimated time: 2 days - Assigned to: Matifire
+
+Web design:
+- [ ] Web design UI/UX - Estimated time: 2 days - Assigned to: Matifire
+- [ ] Web design UI/UX Home page - Estimated time: 2 days - Assigned to: Matifire
+
+Fixes Mobile:
+- [ ] Fix mobile app (SplashScreen) - Estimated time: 2 days - Assigned to: VyOk
+- [ ] Fix mobile app (ModelsData) - Estimated time: 2 days - Assigned to: VyOk
 
 ### Sprint 4 - Bonus -  1 week
 
