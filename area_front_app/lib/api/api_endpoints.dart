@@ -17,4 +17,6 @@ class ApiRoutes {
   static const String actions = 'actions';
   static const String reactions = 'reactions';
   static const String area = 'area/';
+  static const String authMSTeams = 'auth/teams/callback';
+  static const String authorizeMSTeams = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?';
 }
