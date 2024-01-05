@@ -23,7 +23,10 @@ The application code is structured as follows:
       - **`manage_password/`**
         - `api_reset_password.dart`: Reset password route.
       - **`profile/`**
+        - `api_delete_account.dart`: Delete account route.
         - `api_username.dart`: Username management route.
+      - **`reaction/`**
+        - `api_reaction.dart`: Reaction route.
       - **`services/`**
         - `api_user_services.dart`: User-related services.
   - **`storage/`**
@@ -31,15 +34,20 @@ The application code is structured as follows:
 
 - **`components/`**
   - `bottom_navigation_bar.dart`: Reusable bottom navigation bar.
+  - **`build_text_dashboard.dart`**
+  - `copy_area_card.dart`
   - **`dialogs/`**
     - `custom_dialog.dart`: Custom dialog box.
+  - `fake_user_profile.dart`: Fake user profile.
   - `generic_button.dart`: Reusable generic button.
   - `image_tile_blur.dart`: Image tile with blur effect.
+  - `mini_dashboard.dart`: Mini dashboard.
   - `not_implemented_alert.dart`: Alert indicating that the feature is not yet implemented.
   - `oauth2_service_box.dart`: OAuth2 service box.
   - `styled_text_field.dart`: Reusable styled text field.
 
 - **`images/`** : Contains images used in the application.
+  - `config2.jpeg`
   - `github.png`
   - `google.png`
   - `logo.png`
@@ -53,15 +61,19 @@ The application code is structured as follows:
   - **`auth/`** : Authentication-related pages
     - `login_page.dart`: Login page.
     - `register_page.dart`: Registration page.
+  - **`copyarea/`**
+    - `copy_area_page.dart`
   - **`home/`** : Home-related pages
+    - `dashboard_page.dart`: Dashboard page.
     - `profile_page.dart`: Profile page.
     - `show_oauth2_services_page.dart`: Page displaying OAuth2 services.
   - `home_page.dart`: Home page.
   - **`setting/`** : Settings-related pages
-    - `about_us.dart`: Application information page.
+    - `onboarding_page.dart`: Onboarding page.
     - `setting_page.dart`: Settings page.
   - `splash_page.dart`: Introduction or startup page.
 
+23 directories, 45 files
 
 # Adding a Route in Flutter
 
@@ -110,11 +122,52 @@ If you want to add a new route to your Flutter application, follow these steps:
 4. **Update UI or Widgets:**
    - If your new route has associated UI, create the necessary widgets in the `pages/` directory or a subdirectory and update the navigation logic accordingly.
    - Example of a api_login : 
-    ``` dart
-    ApiLogin.login(
-                              emailController.text, passwordController.text)
-                          .then((statusCode) {
-                        HandlerValidationRequest.showMessage(
-                            context, statusCode, 'Login', '/home');
-                      });
+    ```dart
+     ApiLogin.login(
+         emailController.text, passwordController.text)
+         .then((statusCode) {
+       HandlerValidationRequest.showMessage(
+           context, statusCode, 'Login', '/home');
+     });
     ```
+
+5. **Add Provider:**
+    - If your new route has associated data, create a new provider in the `api/routes/auth/oauth2` directory and update the `providers.dart` file to include your new provider.
+    - Example of a provider : 
+      ```dart
+      class ApiGitHub {
+        static String clientID = dotenv.env['CLIENT_ID'] ?? '';
+        static String clientSCOPE = dotenv.env['CLIENT_SCOPE'] ?? '';
+
+        Future<void> authenticateWithGitHub() async {
+          if (clientID.isEmpty) {
+            throw 'Missing GitHub client ID or client secret';
+          }
+
+          final authCallbackURL =
+              Uri.encodeFull(ApiRoutes.baseUrl + ApiRoutes.authGithub);
+
+          final String link =
+              '${ApiRoutes.authorizeGithub}client_id=$clientID&redirect_uri=$authCallbackURL&scope=$clientSCOPE';
+          Uri uri = Uri.parse(link);
+          if (!await launchUrl(uri)) {
+            throw 'Could not launch $link';
+          }
+        }
+      }
+      ```
+    - Components OAuth2ServiceBox will create the design for the future provider with a switch for on/off functionality. In the `show_oauth2_services_page` class, it will be necessary to add a name and an image to the list of providers.
+    - Example of a list of providers :
+      ```dart
+      List myOAuth2Services = [
+        ["Github", "lib/images/github.png"],
+        ["Google", "lib/images/google.png"],
+        ["Discord", "lib/images/google.png"],
+        ["Steam", "lib/images/google.png"],
+      ];
+      ```
+
+      The rest will be handled automatically.
+
+6. **Add Action & Reaction:**
+    - If it's a simple action and reaction, there is no need to handle it in the front-end, as it will be directly added to the lists of actions and reactions planned in the dashboard components.
