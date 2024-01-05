@@ -109,4 +109,37 @@ export class AuthController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Get('spotify')
+  @UseGuards(AuthGuard('spotify'))
+  @ApiOperation({ summary: 'launch the spotify OAuth2.0 process' })
+  async loginSpotify() {
+    //
+  }
+
+  @Get('spotify/callback')
+  @UseGuards(AuthGuard('spotify'))
+  @ApiOperation({ summary: 'Handle the OAuth callback from spotify' })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully logged in.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'User not logged in.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
+  })
+  async spotifyAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.authService.spotifyLogin(req)
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during user login:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
 }
