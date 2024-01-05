@@ -43,7 +43,7 @@ export class AreaService {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ webhookEndpoint: reactionUrl.data[0].callback_url }),
+        body: JSON.stringify({ webhookEndpoint: reactionUrl.data[0].callback_url, user: user.data.user.email }),
       });
       let loadAction = await res.json();
       if (res.status !== 201) {
@@ -108,6 +108,7 @@ export class AreaService {
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ user: user.data.user.email }),
       });
       let loadAction = await res.json();
       if (loadAction.message === 'error, User not logged in') {

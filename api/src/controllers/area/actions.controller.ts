@@ -93,8 +93,13 @@ export class ActionsController {
           example: 'http://api:8080/reaction/email',
           description: 'url for the reaction',
         },
+        user: {
+          type: 'string',
+          example: 'user@test.test',
+          description: 'user for the action',
+        }
       },
-      required: ['webhookEndpoint'],
+      required: ['webhookEndpoint', 'user'],
     },
   })
   async starAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
@@ -119,9 +124,23 @@ export class ActionsController {
     status: 401,
     description: 'User not logged in.',
   })
-  async unstarAction(@Res() res: Response, @Req() request: Request): Promise<Response> {
+  @ApiBody({
+    description: 'Webhook endpoint of the action to unstar.',
+    schema: {
+      type: 'object',
+      properties: {
+        user: {
+          type: 'string',
+          example: 'user@test.test',
+          description: 'user for the action',
+        }
+      },
+      required: ['webhookEndpoint', 'user'],
+    },
+  })
+  async unstarAction(@Res() res: Response, @Req() req: Request): Promise<Response> {
     try {
-      const [statusCode, message] = await this.actionsService.unstarAction();
+      const [statusCode, message] = await this.actionsService.unstarAction(req.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
       return res.status(statusCode).json({ message });
@@ -169,8 +188,13 @@ export class ActionsController {
           example: 'http://api:8080/reaction/email',
           description: 'url for the reaction',
         },
+        user: {
+          type: 'string',
+          example: 'user@test.test',
+          description: 'user for the action',
+        }
       },
-      required: ['webhookEndpoint'],
+      required: ['webhookEndpoint', 'user'],
     },
   })
   async receivedEmail(@Res() res: Response, @Req() request: Request): Promise<Response> {
@@ -181,6 +205,22 @@ export class ActionsController {
       return res.status(statusCode).json({ message: message });
     } catch (error) {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+  }
+
+
+  @Get('webhook')
+  @ApiOperation({ summary: 'get webhook for every actions' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, webhook getted',
+  })
+  async getWebhook(): Promise<[number, string]> {
+    try {
+      const result = await this.actionsService.getWebhook();
+      return result;
+    } catch (error) {
+      return [error.status, error.message];
     }
   }
 }

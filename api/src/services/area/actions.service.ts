@@ -35,15 +35,19 @@ export class ActionsService {
 
   async starAction(body: any): Promise<[number, string]> {
     try {
-      const user = await supabase.auth.getUser();
+      const user = body.user;
 
-      if (user.error) {
-        return [401, 'error, User not logged in'];
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
       }
 
       const credentials = await supabase.from('user_provider')
         .select('token')
-        .eq('user_id', user.data.user.email)
+        .eq('user_id', user)
         .eq('provider_id', 'Github');
 
       if (credentials.error) {
@@ -72,7 +76,7 @@ export class ActionsService {
             active: true,
             events: ['star'],
             config: {
-              url: body.webhookEndpoint + '?email=' + user.data.user.email + '&action=star',
+              url: body.webhookEndpoint + '?email=' + user + '&action=star',
             },
           },
           {
@@ -92,17 +96,21 @@ export class ActionsService {
     }
   }
 
-  async unstarAction(): Promise<[number, string]> {
+  async unstarAction(body: any): Promise<[number, string]> {
     try {
-      const user = await supabase.auth.getUser();
+      const user = body.user;
 
-      if (user.error) {
-        return [401, 'error, User not logged in'];
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
       }
 
       const credentials = await supabase.from('user_provider')
         .select('token')
-        .eq('user_id', user.data.user.email)
+        .eq('user_id', user)
         .eq('provider_id', 'Github');
 
       if (credentials.error) {
@@ -151,7 +159,7 @@ export class ActionsService {
           }
         );
         for (let i = 0; i < response.data.length; i++) {
-          if (response.data[i].config.url === reaction.data[0].callback_url + '?email=' + user.data.user.email + '&action=star') {
+          if (response.data[i].config.url === reaction.data[0].callback_url + '?email=' + user + '&action=star') {
             let webhookId = response.data[i].id;
             await axios.delete(
               `https://api.github.com/repos/${owner.data.login}/${repo.name}/hooks/${webhookId}`,
@@ -189,20 +197,22 @@ export class ActionsService {
 
   async receivedEmail(body: any): Promise<[number, string]> {
     try {
-      const user = await supabase.auth.getUser();
       const oauth2Client = new google.auth.OAuth2(
         process.env.GOOGLE_CLIENT_ID,
         process.env.GOOGLE_CLIENT_SECRET,
         body.webhookEndpoint
       );
 
-      if (user.error) {
-        return [401, 'error, User not logged in'];
-      }
+      const user = body.user;
+
 
       const userDatas = await supabase.from('profile')
         .select('datas')
-        .eq('email', user.data.user.email);
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
+      }
 
       let datas = {
         lastEmail: null,
@@ -213,7 +223,7 @@ export class ActionsService {
 
       const credentials = await supabase.from('user_provider')
         .select('token')
-        .eq('user_id', user.data.user.email)
+        .eq('user_id', user)
         .eq('provider_id', 'Google');
 
       if (credentials.error) {
@@ -242,7 +252,7 @@ export class ActionsService {
       if (datas.lastEmail !== null && datas.lastEmail === timestamp) {
         return [200, 'success, no new email received'];
       }
-      const url = body.webhookEndpoint + '?email=' + user.data.user.email + '&action=email';
+      const url = body.webhookEndpoint + '?email=' + user + '&action=email';
       console.log("ok");
       const res = await axios.post(url, {
         headers: {
@@ -262,8 +272,33 @@ export class ActionsService {
       }
       await supabase.from('profile').update({ datas: {
         lastEmail: timestamp,
-      } }).eq('email', user.data.user.email);
+      } }).eq('email', user);
       return [200, 'success, email received'];
+    } catch (error) {
+      return [error.response.status, error.response.statusText];
+    }
+  }
+
+  async getWebhook(): Promise<[number, string]> {
+    try {
+      const actions = await supabase.from('area').select('user_id, action_id, reaction_id');
+      for (let i = 0; i < actions.data.length; i++) {
+        if (actions.data[i].action_id === 'star' || actions.data[i].action_id === null) {
+          continue;
+        }
+        let action = await supabase.from('action').select('creation_url').eq('name', actions.data[i].action_id);
+        let reaction = await supabase.from('reaction').select('callback_url').eq('name', actions.data[i].reaction_id);
+        console.log(action.data[0].creation_url, reaction.data[0].callback_url, actions.data[i].user_id)
+        const response = await axios.post(action.data[0].creation_url, {
+          webhookEndpoint: reaction.data[i].callback_url,
+          user: actions.data[i].user_id
+        },{
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+      return [200, 'success, webhook getted'];
     } catch (error) {
       return [error.response.status, error.response.statusText];
     }
