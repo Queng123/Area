@@ -7,7 +7,7 @@ export class AuthService {
     const user = await supabase.auth.getUser();
 
     if (user.error) {
-      return [409, 'error, User not logged in'];
+      return [401, 'error, User not logged in'];
     }
     const service = await supabase.from('user_provider')
                             .select('user_id, provider_id')
@@ -17,7 +17,7 @@ export class AuthService {
       return [409, 'error, User already connected with google'];
     }
     if (!req.user) {
-      return [409, 'error, no user found'];
+      return [401, 'error, User not logged in'];
     }
 
     const { data, error } = await supabase.from('user_provider').insert([
@@ -47,7 +47,7 @@ export class AuthService {
         return [409, 'error, User already connected with github'];
     }
     if (!req.user) {
-        return [409, 'error, no user found'];
+        return [401, 'error, User not logged in'];
     }
     const { data, error } = await supabase.from('user_provider')
         .insert([
@@ -79,7 +79,7 @@ export class AuthService {
     }
 
     if (!req.user) {
-        return [403, 'error, no user found'];
+        return [401, 'error, User not logged in'];
     }
 
     const { data, error } = await supabase.from('user_provider')
@@ -112,7 +112,7 @@ export class AuthService {
         return [409, 'error, User already connected with Spotify'];
     }
     if (!req.user) {
-        return [403, 'error, no user found'];
+        return [401, 'error, User not logged in'];
     }
     const { data, error } = await supabase.from('user_provider')
         .insert([

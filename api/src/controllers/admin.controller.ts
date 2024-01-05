@@ -1,16 +1,5 @@
-import {
-  Controller,
-  HttpStatus,
-  Req,
-  Res,
-  Delete
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody
-} from '@nestjs/swagger';
+import { Controller, HttpStatus, Req, Res, Delete } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { AdminService } from '../services/admin.service';
 

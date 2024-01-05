@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Request, Response } from 'express';
+import { apigateway } from 'googleapis/build/src/apis/apigateway';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -12,25 +13,29 @@ export class AuthController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  @ApiOperation({ summary: 'launch the google OAuth2.0 process' })
+  @ApiOperation({ summary: 'Launch the google OAuth2.0 process' })
   async loginGoogle() {
     //
   }
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  @ApiOperation({ summary: 'log the user in google provider' })
+  @ApiOperation({ summary: 'Handle the Google OAuth callback' })
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in.',
   })
   @ApiResponse({
     status: 409,
-    description: 'User not logged in.',
+    description: 'User already connected with google.',
   })
   @ApiResponse({
     status: 500,
     description: 'Internal server error.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'User not logged in.',
   })
   async googleAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {
@@ -45,20 +50,24 @@ export class AuthController {
 
   @Get('github')
   @UseGuards(AuthGuard('github'))
-  @ApiOperation({ summary: 'launch the github OAuth2.0 process' })
+  @ApiOperation({ summary: 'Launch the github OAuth2.0 process' })
   async loginGithub() {
     //
   }
 
   @Get('github/callback')
   @UseGuards(AuthGuard('github'))
-  @ApiOperation({ summary: 'log the user in github provider' })
+  @ApiOperation({ summary: 'Handle the Github OAuth callback' })
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in.',
   })
   @ApiResponse({
     status: 409,
+    description: 'User already connected with github.',
+  })
+  @ApiResponse({
+    status: 401,
     description: 'User not logged in.',
   })
   @ApiResponse({
@@ -79,14 +88,14 @@ export class AuthController {
 
   @Get('teams')
   @UseGuards(AuthGuard('MSTeams'))
-  @ApiOperation({ summary: 'launch the teams OAuth2.0 process' })
+  @ApiOperation({ summary: 'Launch the MSTeams OAuth2.0 process' })
   async loginTeams() {
     //
   }
 
   @Get('teams/callback')
   @UseGuards(AuthGuard('MSTeams'))
-  @ApiOperation({ summary: 'Handle teams callback process' })
+  @ApiOperation({ summary: 'Handle MSTeams callback process' })
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in.',
@@ -98,6 +107,10 @@ export class AuthController {
   @ApiResponse({
     status: 500,
     description: 'Internal server error.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already connected with MSteams.',
   })
   async teamsAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {
@@ -112,7 +125,7 @@ export class AuthController {
 
   @Get('spotify')
   @UseGuards(AuthGuard('spotify'))
-  @ApiOperation({ summary: 'launch the spotify OAuth2.0 process' })
+  @ApiOperation({ summary: 'Launch the spotify OAuth2.0 process' })
   async loginSpotify() {
     //
   }
@@ -131,6 +144,10 @@ export class AuthController {
   @ApiResponse({
     status: 500,
     description: 'Internal server error.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already connected with spotify.',
   })
   async spotifyAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {

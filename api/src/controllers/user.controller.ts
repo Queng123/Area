@@ -1,23 +1,7 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  HttpStatus,
-  Post,
-  Req,
-  Res
-} from '@nestjs/common';
-import {
-  Request,
-  Response
-} from 'express';
+import { Controller, Delete, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { UserService } from '../services/user.service';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
 
 @Controller('user')
 @ApiTags('user')
