@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -7,6 +7,7 @@ import './styles/Home.css';
 export function Home() {
     const navigate = useNavigate();
     const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const [username, setUsername] = useState('');
 
     const [password, setPassword] = useState<string>('');
 
@@ -38,8 +39,26 @@ export function Home() {
         console.log('Server response:', response.data);
         setPassword('');
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user`);
+                const userData = response.data;
+                setUsername(userData.message);
+                console.log('Username:', username);
+                console.log('Server responsssse:', response.data);
+            } catch (error) {
+                console.error('Erreur lors de la requête GET', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div>
+            <h1>Bienvenue, {username}</h1>
             <button className='button-circle' onClick={handleClick}>Log Out</button>
             <button className='button-circle' onClick={DeleteAccount}>Delete account</button>
             <button className='button-circle' onClick={UpdatePassword}>Update Password</button>
