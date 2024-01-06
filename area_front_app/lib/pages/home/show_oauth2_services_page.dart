@@ -43,7 +43,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     ["Github", "lib/images/github.png"],
     ["Google", "lib/images/google.png"],
     ["Spotify", "lib/images/spotify.png"],
-    ["Teams", "lib/images/msteams.png"],
+    ["MSTeams", "lib/images/msteams.png"],
   ];
 
   @override
@@ -114,7 +114,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                       ApiSpotify().authenticateWithSpotify();
                       powerSwitchChanged(true, index);
                     }
-                    if (myOAuth2Services[index][0] == "Teams") {
+                    if (myOAuth2Services[index][0] == "MSTeams") {
                       ApiMSTeams().authenticateWithMSTeams();
                       powerSwitchChanged(true, index);
                     }
