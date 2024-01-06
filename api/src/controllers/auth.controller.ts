@@ -159,4 +159,41 @@ export class AuthController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Get('discord')
+  @UseGuards(AuthGuard('discord'))
+  @ApiOperation({ summary: 'Launch the discord OAuth2.0 process' })
+  async loginDiscord() {
+    //
+  }
+
+  @Get('discord/callback')
+  @UseGuards(AuthGuard('discord'))
+  @ApiOperation({ summary: 'Handle the OAuth callback from discord' })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully logged in.',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'User not logged in.',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal server error.',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'User already connected with discord.',
+  })
+  async discordAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.authService.discordLogin(req)
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during user login:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
 }
