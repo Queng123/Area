@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
       setupFiles: ['./src/setupTests.ts'],
     },
     server: {
-      port: 3000,
+      port: 8081,
       host: true,
     }
   }
