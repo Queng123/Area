@@ -14,7 +14,7 @@ export class ActionsService {
       if (response.error) {
           throw response.error;
       }
-      return [201, 'success, Provider created'];
+      return [201, 'success, action created'];
     } catch (error) {
         return [error.status, error.message];
     }
@@ -239,7 +239,6 @@ export class ActionsService {
         q: 'is:unread in:inbox',
       });
       const messages = response.data.messages;
-
       if (messages === undefined) {
         return [200, 'success, no new email received'];
       }
@@ -253,8 +252,10 @@ export class ActionsService {
         return [200, 'success, no new email received'];
       }
       const url = body.webhookEndpoint + '?email=' + user + '&action=email';
-      console.log("ok");
       const res = await axios.post(url, {
+        subject: "New email",
+        html: `<p>Hi, you have a new email.</p>`,
+      },{
         headers: {
           'Content-Type': 'application/json',
         },
@@ -279,26 +280,64 @@ export class ActionsService {
     }
   }
 
-  async getWebhook(): Promise<[number, string]> {
+  async getMeteo(body: any): Promise<[number, string]> {
     try {
-      const actions = await supabase.from('area').select('user_id, action_id, reaction_id');
-      for (let i = 0; i < actions.data.length; i++) {
-        if (actions.data[i].action_id === 'star' || actions.data[i].action_id === null) {
-          continue;
-        }
-        let action = await supabase.from('action').select('creation_url').eq('name', actions.data[i].action_id);
-        let reaction = await supabase.from('reaction').select('callback_url').eq('name', actions.data[i].reaction_id);
-        console.log(action.data[0].creation_url, reaction.data[0].callback_url, actions.data[i].user_id)
-        const response = await axios.post(action.data[0].creation_url, {
-          webhookEndpoint: reaction.data[i].callback_url,
-          user: actions.data[i].user_id
-        },{
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+      const user = body.user;
+
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
       }
-      return [200, 'success, webhook getted'];
+
+      const credentials = await supabase.from('user_provider')
+        .select('token')
+        .eq('user_id', user)
+        .eq('provider_id', 'OpenWeatherMap');
+
+      if (credentials.error) {
+        throw credentials.error;
+      }
+
+      const response = await axios.get('http://api.weatherapi.com/v1/current.json?key=' + process.env.METEO_API_KEY + '&q=Nantes');
+
+      if (response.status !== 200) {
+        const error = {
+          response: {
+            status: response.status,
+            data: {
+              statusText: response.statusText,
+            },
+          },
+        };
+        throw error;
+      }
+      if (response.data.current.temp_c > 10) {
+        return [200, 'success, meteo superior to 10'];
+      }
+      const url = body.webhookEndpoint + '?email=' + user + '&action=meteo';
+      const res = await axios.post(url, {
+        subject: 'Meteo warning',
+        html: `<p>Hi, the meteo is under 10°c in Nantes.</p>`,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status !== 201) {
+        const error = {
+          response: {
+            status: res.status,
+            data: {
+              statusText: res.statusText,
+            },
+          },
+        };
+        throw error;
+      }
+      return [200, 'success, meteo under 10'];
     } catch (error) {
       return [error.response.status, error.response.statusText];
     }

@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import axios from 'axios';
-import { Request, Response } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,21 +17,24 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const webhookUrl = process.env.APP_URL + 'actions/webhook';
-  const interval = 1000 * 60 * 5; // 5 minutes
+  const webhookUrl = process.env.APP_URL + 'webhook/';
+  const intervalFiveMinutes = 1000 * 60 * 5; // 5 minutes
+  const intervalDay = 1000 * 60 * 60 * 24; // 24 hours
 
-  const makeApiCall = async () => {
+  const makeApiCall = async (time: string) => {
     try {
-      const response = await axios.get(webhookUrl);
-      console.log(`Status Code: ${response.status}, Message: ${response.data.message}`);
+      const response = await axios.get(webhookUrl + time);
+      console.log(`${response.data} with url ${webhookUrl + time}`);
     } catch (error) {
       console.error('Error during webhook call:', error);
     }
   };
 
-  makeApiCall();
+  makeApiCall("five-minutes");
+  makeApiCall("one-day");
 
-  setInterval(makeApiCall, interval);
+  setInterval(() => makeApiCall("five-minutes"), intervalFiveMinutes);
+  setInterval(() => makeApiCall("one-day"), intervalDay);
 
   await app.listen(process.env.PORT || 8080);
 }

@@ -89,9 +89,9 @@ export class ReactionsController {
     description: 'Action link to this reaction',
     example: 'star'
   })
-  async sendMail(@Res() res: Response, @Query('email') email, @Query('action') action ): Promise<Response> {
+  async sendMail(@Res() res: Response, @Query('email') email, @Query('action') action, @Req()  req: Request ): Promise<Response> {
     try {
-      const [statusCode, message] = await this.reactionsService.sendMail(email, action);
+      const [statusCode, message] = await this.reactionsService.sendMail(email, action, req.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
       return res.status(statusCode).json({ message });

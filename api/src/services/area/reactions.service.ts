@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import supabase from '../../config/supabase.config';
 import resend from '../../config/resend.config';
+import { Console } from 'console';
 
 @Injectable()
 export class ReactionsService {
@@ -13,7 +14,7 @@ export class ReactionsService {
       if (response.error) {
           throw response.error;
       }
-      return [201, 'success, Provider created'];
+      return [201, 'success, reaction created'];
     } catch (error) {
         return [error.status, error.message];
     }
@@ -32,7 +33,7 @@ export class ReactionsService {
     }
   }
 
-  async sendMail(email: string, action: string): Promise<[number, string]> {
+  async sendMail(email: string, action: string, body: any): Promise<[number, string]> {
     try {
       let subject: string;
       let html: string;
@@ -40,12 +41,12 @@ export class ReactionsService {
         subject = 'New star on Github';
         html = `<p>Hi, you have a new star on Github on your repository.</p>`;
       } else {
-        subject = 'Not implemented yet';
-        html = `<p>Hi, this action is not implemented yet.</p>`;
+        subject = body.subject || 'Not implemented yet';
+        html = body.html || `<p>Hi, this action is not implemented yet.</p>`;
       }
       const res = await resend.emails.send({
         from: 'onboarding@resend.dev',
-        to: email,
+        to: 'quentin.brejoin@gmail.com',
         subject: subject,
         html: html
       });

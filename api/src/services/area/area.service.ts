@@ -32,7 +32,7 @@ export class AreaService {
       const actionProviderPresent = userProviders.data.some(provider => provider.provider_id === actionProvider.data[0].provider_id);
       const reactionProviderPresent = userProviders.data.some(provider => provider.provider_id === reactionProvider.data[0].provider_id);
 
-      if (!actionProviderPresent || (!reactionProviderPresent && reaction !== 'email')) {
+      if ((!actionProviderPresent && action != 'meteo') || (!reactionProviderPresent && reaction !== 'email')) {
         return [401, 'error, User not connected to the required providers'];
       }
       const actionUrl = await supabase.from('action').select('creation_url').eq('name', action);
@@ -46,7 +46,7 @@ export class AreaService {
         body: JSON.stringify({ webhookEndpoint: reactionUrl.data[0].callback_url, user: user.data.user.email }),
       });
       let loadAction = await res.json();
-      if (res.status !== 201) {
+      if (res.status !== 201 && res.status !== 200) {
         console.log(loadAction);
         throw [res.status, loadAction.message];
       }

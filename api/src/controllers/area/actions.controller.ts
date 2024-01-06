@@ -208,19 +208,40 @@ export class ActionsController {
     }
   }
 
-
-  @Get('webhook')
-  @ApiOperation({ summary: 'get webhook for every actions' })
+  @Post('meteo')
+  @ApiOperation({ summary: 'Get current meteo' })
   @ApiResponse({
     status: 201,
-    description: 'success, webhook getted',
+    description: 'success, meteo getted',
   })
-  async getWebhook(): Promise<[number, string]> {
+  @ApiBody({
+    description: 'Webhook endpoint of the action meteo.',
+    schema: {
+      type: 'object',
+      properties: {
+        webhookEndpoint: {
+          type: 'string',
+          example: 'http://api:8080/reaction/email',
+          description: 'url for the reaction',
+        },
+        user: {
+          type: 'string',
+          example: 'test@test.test',
+          description: 'user for the action',
+        }
+      },
+      required: ['webhookEndpoint', 'user'],
+    },
+  })
+  async getMeteo(@Res() res: Response, @Req() request: Request): Promise<Response> {
     try {
-      const result = await this.actionsService.getWebhook();
-      return result;
+      const [statusCode, message] = await this.actionsService.getMeteo(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
-      return [error.status, error.message];
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
+
 }
