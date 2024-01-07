@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import supabase from '../../config/supabase.config';
-import resend from '../../config/resend.config';
-import { Console } from 'console';
 import axios from 'axios';
 
 @Injectable()
@@ -45,18 +43,31 @@ export class ReactionsService {
         subject = body.subject || 'Not implemented yet';
         html = body.html || `<p>Hi, this action is not implemented yet.</p>`;
       }
-      const res = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to: email,
-        subject: subject,
-        html: html
-      });
-      if (res.error) {
-        throw [500, res.error.message]
-      }
-
+      const mailjet = require('node-mailjet')
+        .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+      const res = mailjet
+        .post("send", {'version': 'v3.1'})
+        .request({
+          "Messages":[
+            {
+              "From": {
+                "Email": "quentin.brejoin@gmail.com",
+                "Name": "Mailjet Pilot"
+              },
+              "To": [
+                {
+                  "Email": email,
+                  "Name": email.split('@')[0]
+                }
+              ],
+              "Subject": email,
+              "HTMLPart": html
+            }
+          ]
+        });
       return [201, 'success, email sent'];
     } catch (error) {
+      console.log("error", error)
         return error;
     }
   }
