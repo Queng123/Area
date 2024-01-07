@@ -124,4 +124,34 @@ export class ReactionsController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Post('spotify')
+  @ApiOperation({ summary: 'Start your last played spotify music' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, spotify music started',
+  })
+  @ApiParam({
+    name: 'email',
+    required: true,
+    description: 'Email of the user',
+    example: 'test@test.test',
+  })
+  @ApiParam({
+    name: 'action',
+    required: true,
+    description: 'Action link to this reaction',
+    example: 'star',
+  })
+  async startSpotify(@Res() res: Response, @Query('email') email, @Query('action') action, @Req()  req: Request ): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.reactionsService.startSpotify(email, action, req.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
 }

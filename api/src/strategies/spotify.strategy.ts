@@ -9,7 +9,7 @@ export class SpotifyStrategy extends PassportStrategy(Strategy, 'spotify') {
       clientID: process.env.SPOTIFY_CLIENT_ID,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
       callbackURL: process.env.APP_URL + 'auth/spotify/callback',
-      scope: 'user-read-private user-read-email playlist-modify-private playlist-read-collaborative playlist-read-private playlist-modify-public',
+      scope: 'user-read-private user-read-email playlist-modify-private playlist-read-collaborative playlist-read-private playlist-modify-public user-read-recently-played user-modify-playback-state',
     });
   }
 

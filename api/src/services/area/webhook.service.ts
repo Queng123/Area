@@ -10,17 +10,21 @@ export class WebhookService {
 
       for (let i = 0; i < actions.data.length; i++) {
         if (actionsToTrigger.includes(actions.data[i].action_id)) {
-          let action = await supabase.from('action').select('creation_url').eq('name', actions.data[i].action_id);
-          let reaction = await supabase.from('reaction').select('callback_url').eq('name', actions.data[i].reaction_id);
-          console.log(`triggering ${actions.data[i].action_id} with ${actions.data[i].reaction_id} for ${actions.data[i].user_id}`)
-          const response = await axios.post(action.data[0].creation_url, {
-            webhookEndpoint: reaction.data[0].callback_url,
-            user: actions.data[i].user_id
-          },{
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+          try {
+            let action = await supabase.from('action').select('creation_url').eq('name', actions.data[i].action_id);
+            let reaction = await supabase.from('reaction').select('callback_url').eq('name', actions.data[i].reaction_id);
+            console.log(`triggering ${actions.data[i].action_id} with ${actions.data[i].reaction_id} for ${actions.data[i].user_id}`)
+            const response = await axios.post(action.data[0].creation_url, {
+              webhookEndpoint: reaction.data[0].callback_url,
+              user: actions.data[i].user_id
+            },{
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+          } catch (error) {
+            console.log(error.response.status, error.response.statusText);
+          }
         }
       }
       return [200, 'success, webhook getted'];

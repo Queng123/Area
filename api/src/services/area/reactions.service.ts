@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import supabase from '../../config/supabase.config';
 import resend from '../../config/resend.config';
 import { Console } from 'console';
+import axios from 'axios';
 
 @Injectable()
 export class ReactionsService {
@@ -46,7 +47,7 @@ export class ReactionsService {
       }
       const res = await resend.emails.send({
         from: 'onboarding@resend.dev',
-        to: 'quentin.brejoin@gmail.com',
+        to: email,
         subject: subject,
         html: html
       });
@@ -57,6 +58,37 @@ export class ReactionsService {
       return [201, 'success, email sent'];
     } catch (error) {
         return error;
+    }
+  }
+
+  async startSpotify(email: string, action: string, body: any): Promise<[number, string]> {
+    try {
+      const token = await supabase.from('user_provider').select('token').eq('user_id', email).eq('provider_id', 'Spotify');
+      const lastMusic = await axios.get('https://api.spotify.com/v1/me/player/recently-played', {
+        headers: {
+          'Authorization': `Bearer ${token.data[0].token}`
+        }
+      });
+      const playMusic = await axios.put('https://api.spotify.com/v1/me/player/play', {
+        contextUri: lastMusic.data.items[0].context.uri,
+        uris: [lastMusic.data.items[0].track.uri],
+        offset: {
+          position: 0
+        },
+        position_ms: 0
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token.data[0].token}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      if (playMusic.data.error) {
+        throw [500, playMusic.data.error.message]
+      }
+      return [201, 'success, music played'];
+    } catch (error) {
+      console.log("error", error)
+      return error;
     }
   }
 
