@@ -8,6 +8,7 @@ import 'package:area_front_app/pages/copyarea/copy_area_page.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_google.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_spotify.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_msteams.dart';
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_discord.dart';
 
 class OAuth2ServicesPage extends StatefulWidget {
   const OAuth2ServicesPage({super.key});
@@ -41,6 +42,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
 
   List myOAuth2Services = [
     ["Github", "lib/images/github.png"],
+    ["Discord", "lib/images/discord.png"],
     ["Google", "lib/images/google.png"],
     ["Spotify", "lib/images/spotify.png"],
     ["MSTeams", "lib/images/msteams.png"],
@@ -59,26 +61,39 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     }
   }
 
+  Future<void> _reloadProfileData() async {
+    userProfile.serviceStatus = await ApiUserServices.isServiceConnected();
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   void powerSwitchChanged(bool value, int index) {
     setState(() {
       userProfile.serviceStatus[myOAuth2Services[index][0]] = value;
     });
+    _reloadProfileData();
   }
 
-  Expanded buildOAuth2ServicesGrid() {
-    return Expanded(
-      child: GridView.builder(
-        itemCount: myOAuth2Services.length,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1.1,
-        ),
-        itemBuilder: (context, index) {
-          return buildOAuth2ServiceBox(index);
-        },
-      ),
+  ListView buildOAuth2ServicesList() {
+    return ListView.builder(
+      itemCount: (myOAuth2Services.length / 2).ceil(),
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      itemBuilder: (context, index) {
+        int startIndex = index * 2;
+        int endIndex = startIndex + 2;
+        if (endIndex > myOAuth2Services.length) {
+          endIndex = myOAuth2Services.length;
+        }
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: List.generate(endIndex - startIndex, (i) {
+            return Expanded(
+              child: buildOAuth2ServiceBox(startIndex + i),
+            );
+          }),
+        );
+      },
     );
   }
 
@@ -100,24 +115,30 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
               ),
               actions: [
                 TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.of(context).pop();
-                    if (myOAuth2Services[index][0] == "Github") {
-                      ApiGitHub().authenticateWithGitHub();
-                      powerSwitchChanged(true, index);
+                    final serviceName = myOAuth2Services[index][0];
+
+                    switch (serviceName) {
+                      case "Github":
+                        await ApiGitHub().authenticateWithGitHub();
+                        break;
+                      case "Google":
+                        await ApiGoogle().authenticateWithGoogle();
+                        break;
+                      case "Spotify":
+                        await ApiSpotify().authenticateWithSpotify();
+                        break;
+                      case "MSTeams":
+                        await ApiMSTeams().authenticateWithMSTeams();
+                        break;
+                      case "Discord":
+                        await ApiDiscord().authenticateWithDiscord();
+                        break;
+                      default:
+                        break;
                     }
-                    if (myOAuth2Services[index][0] == "Google") {
-                      ApiGoogle().authenticateWithGoogle();
-                      powerSwitchChanged(true, index);
-                    }
-                    if (myOAuth2Services[index][0] == "Spotify") {
-                      ApiSpotify().authenticateWithSpotify();
-                      powerSwitchChanged(true, index);
-                    }
-                    if (myOAuth2Services[index][0] == "MSTeams") {
-                      ApiMSTeams().authenticateWithMSTeams();
-                      powerSwitchChanged(true, index);
-                    }
+                    powerSwitchChanged(true, index);
                   },
                   child: const Text('Connect'),
                 ),
@@ -265,7 +286,8 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                 color: Color.fromRGBO(66, 66, 66, 1),
               ),
             ),
-            if (isShowOAuth2Services) buildOAuth2ServicesGrid(),
+            if (isShowOAuth2Services)
+              Expanded(child: buildOAuth2ServicesList()),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Row(

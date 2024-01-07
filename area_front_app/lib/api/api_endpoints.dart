@@ -25,4 +25,6 @@ class ApiRoutes {
       'https://accounts.spotify.com/authorize?';
   static const String authMSTeams = 'auth/teams/callback';
   static const String authorizeMSTeams = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?';
+  static const String authDiscord = 'auth/discord/callback';
+  static const String authorizeDiscord = 'https://discord.com/api/oauth2/authorize?';
 }
