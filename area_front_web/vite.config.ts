@@ -9,7 +9,13 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     define: {
-      'process.env.REACT_APP_BASE_URL': JSON.stringify(env.REACT_APP_BASE_URL)
+      'process.env.REACT_APP_BASE_URL': JSON.stringify(env.REACT_APP_BASE_URL),
+      'process.env.GOOGLE_CLIENT_ID': JSON.stringify(env.GOOGLE_CLIENT_ID),
+      'process.env.GOOGLE_CLIENT_SCOPE': JSON.stringify(env.GOOGLE_CLIENT_SCOPE),
+      'process.env.DISCORD_CLIENT_ID': JSON.stringify(env.DISCORD_CLIENT_ID),
+      'process.env.DISCORD_CLIENT_SCOPE': JSON.stringify(env.DISCORD_CLIENT_SCOPE),
+      'process.env.GITHUB_CLIENT_ID': JSON.stringify(env.GITHUB_CLIENT_ID),
+      'process.env.GITHUB_CLIENT_SCOPE': JSON.stringify(env.GITHUB_CLIENT_SCOPE),
     },
     plugins: [react()],
     test: {

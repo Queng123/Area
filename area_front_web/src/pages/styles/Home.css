@@ -1,5 +1,5 @@
 .button-circle {
-    background-color: black;
+    background-color: gray;
     border: none;
     color: white;
     padding: 10px 20px;
@@ -7,10 +7,84 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    margin-right: 20px;
     border-radius: 20px;
     cursor: pointer;
 }
 
 .button-circle:hover {
+    background-color: black;
+}
+
+.square {
+    align-items: center;
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+    height: auto;
+    background-color: #E0E0E0;
+    padding: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.service-boxes {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 20px 0;
+}
+
+.service-box {
+    width: 100px;
+    height: 100px;
+    color: white;
+    border-radius: 10px;
+    border-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin: 10px;
+}
+
+.icons {
+    max-width: 100%;
+    height: auto;
+}
+
+.box-color {
+    background-color: #E0E0E0;
+}
+
+.box-color:hover {
     background-color: gray;
+}
+
+.button-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+}
+
+.update-password-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+input[type='password'] {
+    width: 80%;
+    padding: 5px;
+    border-radius: 10px;
+    margin-top: 10px;
 }
