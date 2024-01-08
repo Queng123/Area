@@ -12,7 +12,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.APP_URL + 'auth/google/callback',
-      scope: ['email', 'profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events', 'https://mail.google.com/']
+      scope: ['email', 'profile', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events', 'https://mail.google.com/'],
+      accessType: 'offline',
+      prompt: 'force'
     });
   }
   async validate(accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
@@ -24,6 +26,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       lastName: name.familyName,
       picture: photos[0].value,
       accessToken,
+      refreshToken
     };
     done(null, user);
   }

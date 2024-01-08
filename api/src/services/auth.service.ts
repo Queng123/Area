@@ -19,12 +19,12 @@ export class AuthService {
     if (!req.user) {
       return [401, 'error, User not logged in'];
     }
-
     const { data, error } = await supabase.from('user_provider').insert([
       {
         user_id: user.data.user.email,
         provider_id: 'Google',
-        token: req.user.accessToken
+        token: req.user.accessToken,
+        refreshToken: req.user.refreshToken
       },
     ]).select();
     if (error) {
