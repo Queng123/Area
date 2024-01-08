@@ -292,15 +292,6 @@ export class ActionsService {
         throw userDatas.error;
       }
 
-      const credentials = await supabase.from('user_provider')
-        .select('token')
-        .eq('user_id', user)
-        .eq('provider_id', 'OpenWeatherMap');
-
-      if (credentials.error) {
-        throw credentials.error;
-      }
-
       const response = await axios.get('http://api.weatherapi.com/v1/current.json?key=' + process.env.METEO_API_KEY + '&q=Nantes');
 
       if (response.status !== 200) {
