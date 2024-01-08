@@ -52,7 +52,7 @@ export class ReactionsService {
             {
               "From": {
                 "Email": "quentin.brejoin@gmail.com",
-                "Name": "Mailjet Pilot"
+                "Name": "AREA"
               },
               "To": [
                 {

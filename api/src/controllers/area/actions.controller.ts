@@ -244,4 +244,39 @@ export class ActionsController {
     }
   }
 
+  @Post('pr')
+  @ApiOperation({ summary: 'Trigger if there is new pr' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, pr getted',
+  })
+  @ApiBody({
+    description: 'Webhook endpoint of the action pr.',
+    schema: {
+      type: 'object',
+      properties: {
+        webhookEndpoint: {
+          type: 'string',
+          example: 'http://api:8080/reaction/email',
+          description: 'url for the reaction',
+        },
+        user: {
+          type: 'string',
+          example: 'test@test.test',
+          description: 'user for the action',
+        }
+      },
+      required: ['webhookEndpoint', 'user'],
+    },
+  })
+  async getPr(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.actionsService.getPr(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message: message });
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+  }
 }

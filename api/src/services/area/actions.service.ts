@@ -333,4 +333,83 @@ export class ActionsService {
       return [error.response.status, error.response.statusText];
     }
   }
+
+  async getPr(body: any): Promise<[number, string]> {
+    try {
+      const user = body.user;
+
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
+      }
+
+      const credentials = await supabase.from('user_provider')
+        .select('token')
+        .eq('user_id', user)
+        .eq('provider_id', 'Github');
+
+      if (credentials.error) {
+        throw credentials.error;
+      }
+      const accessToken = credentials.data[0].token;
+      const owner = await axios.get('https://api.github.com/user', {
+        headers: {
+          Authorization: `token ${accessToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
+
+      const repositories = await axios.get(`https://api.github.com/users/${owner.data.login}/repos`, {
+        headers: {
+          Authorization: `token ${accessToken}`,
+          Accept: 'application/vnd.github.v3+json',
+        },
+      });
+      let pr = false;
+      const webhookPromises = repositories.data.map(async (repo) => {
+        const response = await axios.get(`https://api.github.com/repos/${owner.data.login}/${repo.name}/pulls`, {
+            headers: {
+              Authorization: `token ${accessToken}`,
+              Accept: 'application/vnd.github.v3+json',
+            },
+        });
+        console.log(`Pull request get for ${owner.data.login}/${repo.name}:`, response.data);
+        if (response.data.length !== 0) {
+          pr = true;
+        }
+      });
+      await Promise.all(webhookPromises);
+
+      if (!pr) {
+        return [200, 'success, no pull request open'];
+      }
+
+      const url = body.webhookEndpoint + '?email=' + user + '&action=pr';
+      const res = await axios.post(url, {
+        subject: 'Pull request warning',
+        html: `<p>Hi, you have a pull request open.</p>`,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status !== 201) {
+        const error = {
+          response: {
+            status: res.status,
+            data: {
+              statusText: res.statusText,
+            },
+          },
+        };
+        throw error;
+      }
+      return [200, 'success, you have a pull request open'];
+    } catch (error) {
+      return [error.response.status, error.response.statusText];
+    }
+  }
 }
