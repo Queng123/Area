@@ -9,6 +9,7 @@ import 'package:area_front_app/api/routes/auth/oauth2/api_auth_google.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_spotify.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_msteams.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_discord.dart';
+import 'dart:async';
 
 class OAuth2ServicesPage extends StatefulWidget {
   const OAuth2ServicesPage({super.key});
@@ -52,6 +53,10 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
   void initState() {
     super.initState();
     _loadProfileData();
+
+     Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      _reloadProfileData();
+    });
   }
 
   Future<void> _loadProfileData() async {
@@ -72,7 +77,6 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     setState(() {
       userProfile.serviceStatus[myOAuth2Services[index][0]] = value;
     });
-    _reloadProfileData();
   }
 
   ListView buildOAuth2ServicesList() {
@@ -122,19 +126,14 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     switch (serviceName) {
                       case "Github":
                         await ApiGitHub().authenticateWithGitHub();
-                        break;
                       case "Google":
                         await ApiGoogle().authenticateWithGoogle();
-                        break;
                       case "Spotify":
                         await ApiSpotify().authenticateWithSpotify();
-                        break;
                       case "MSTeams":
                         await ApiMSTeams().authenticateWithMSTeams();
-                        break;
                       case "Discord":
                         await ApiDiscord().authenticateWithDiscord();
-                        break;
                       default:
                         break;
                     }
