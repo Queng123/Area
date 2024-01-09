@@ -1,6 +1,7 @@
-import { Controller, Delete, Get, Param } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, Res, Delete } from '@nestjs/common';
 import { AreaService } from '../../services/area/area.service';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @Controller('area')
 @ApiTags('area')
@@ -33,12 +34,13 @@ export class AreaController {
     description: 'Reaction to trigger',
     example: 'email',
   })
-  async calculateArea(@Param('action') action: string, @Param('reaction') reaction: string): Promise<[number, string]> {
+  async calculateArea(@Res() res: Response, @Param('action') action: string, @Param('reaction') reaction: string): Promise<Response> {
     try {
-      const result = this.areaService.generateArea(action, reaction);
-      return result;
+      const [statusCode, message] = await this.areaService.generateArea(action, reaction);
+
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
-      return [error.status, error.message];
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
 
@@ -68,12 +70,12 @@ export class AreaController {
     description: 'Reaction to trigger',
     example: 'email',
   })
-  async deleteArea(@Param('action') action: string, @Param('reaction') reaction: string): Promise<[number, string]> {
+  async deleteArea(@Res() res: Response, @Param('action') action: string, @Param('reaction') reaction: string): Promise<Response> {
     try {
-      const result = this.areaService.deleteArea(action, reaction);
-      return result;
+      const [statusCode, message] = await this.areaService.deleteArea(action, reaction);
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
-      return [error.status, error.message];
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
 
@@ -91,12 +93,12 @@ export class AreaController {
     status: 404,
     description: 'No areas found',
   })
-  async getArea(): Promise<[number, string]> {
+  async getArea(@Res() res: Response): Promise<Response> {
     try {
-      const result = this.areaService.getAreas();
-      return result;
+      const [statusCode, message] = await this.areaService.getAreas();
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
-      return [error.status, error.message];
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
 }

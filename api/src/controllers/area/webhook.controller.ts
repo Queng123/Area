@@ -1,6 +1,7 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Res, HttpStatus } from '@nestjs/common';
 import { WebhookService } from '../../services/area/webhook.service';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @Controller('webhook')
 @ApiTags('webhook')
@@ -13,7 +14,7 @@ export class WebhookController {
     status: 201,
     description: 'success, webhook getted',
   })
-  async getWebhook(@Param('timer') timer: string): Promise<[number, string]> {
+  async getWebhook(@Res() res: Response, @Param('timer') timer: string): Promise<Response> {
     try {
       let actionsToTrigger: string[] = [];
 
@@ -24,10 +25,10 @@ export class WebhookController {
       } else {
         actionsToTrigger = []
       }
-      const result = await this.webhoooksService.getWebhook(actionsToTrigger);
-      return result;
+      const [statusCode, message] = await this.webhoooksService.getWebhook(actionsToTrigger);
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
-      return [error.status, error.message];
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
 }

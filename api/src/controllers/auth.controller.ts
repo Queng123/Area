@@ -40,7 +40,7 @@ export class AuthController {
     try {
       const [statusCode, message] = await this.authService.googleLogin(req)
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user login:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -77,7 +77,7 @@ export class AuthController {
     try {
       const [statusCode, message] = await this.authService.githubLogin(req)
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user login:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -115,7 +115,7 @@ export class AuthController {
     try {
       const [statusCode, message] = await this.authService.MSTeamsLogin(req)
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user login:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -152,7 +152,7 @@ export class AuthController {
     try {
       const [statusCode, message] = await this.authService.spotifyLogin(req)
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user login:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -189,7 +189,7 @@ export class AuthController {
     try {
       const [statusCode, message] = await this.authService.discordLogin(req)
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user login:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });

@@ -44,7 +44,7 @@ export class UserController {
       const [statusCode, message] = await this.userService.createUserWithEmail(request.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
         console.error('Error during user creation:', error);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -87,7 +87,7 @@ export class UserController {
       const [statusCode, message] = await this.userService.loginUserWithEmail(request.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
         console.error('Error during user login:', error);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -105,7 +105,7 @@ export class UserController {
       const [statusCode, message] = await this.userService.loginUserWithGoogle(request.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
         console.error('Error during user login:', error);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -127,7 +127,7 @@ export class UserController {
       const [statusCode, message] = await this.userService.logoutUser();
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
         console.error('Error during user logout:', error);
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -188,7 +188,7 @@ export class UserController {
     try {
       const [statusCode, message] = await this.userService.updatePassword(request.body);
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user password update:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -209,7 +209,7 @@ export class UserController {
     try {
       const [statusCode, message] = await this.userService.deleteUser();
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user deletion:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -230,7 +230,7 @@ export class UserController {
     try {
       const [statusCode, message] = await this.userService.getUserName();
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user name retrieval:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -251,7 +251,7 @@ export class UserController {
     try {
       const [statusCode, message] = await this.userService.getUserService();
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user service status retrieval:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -285,7 +285,7 @@ export class UserController {
     try {
       const [statusCode, message] = await this.userService.deleteUserProvider(request.body);
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during user service deletion:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });

@@ -41,7 +41,7 @@ export class ProviderController {
       const [statusCode, message] = await this.providerService.createProvider(name, description, url);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });

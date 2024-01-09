@@ -46,7 +46,7 @@ export class ReactionsController {
       const [statusCode, message] = await this.reactionsService.createReaction(name, description, url, provider);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -64,7 +64,7 @@ export class ReactionsController {
       const [statusCode, actions] = await this.reactionsService.getReactions();
 
       console.log(`Status Code: ${statusCode}, Message: ${actions}`);
-      return res.status(statusCode).json({ actions });
+      return res.status(statusCode).json({ message: actions });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -94,7 +94,7 @@ export class ReactionsController {
       const [statusCode, message] = await this.reactionsService.sendMail(email, action, req.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -118,7 +118,7 @@ export class ReactionsController {
       const [statusCode, message] = await this.reactionsService.deleteReaction(request.params.reactionName);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
@@ -148,7 +148,7 @@ export class ReactionsController {
       const [statusCode, message] = await this.reactionsService.startSpotify(email, action, req.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message });
+      return res.status(statusCode).json({ message: message });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
