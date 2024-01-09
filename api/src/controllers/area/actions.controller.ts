@@ -279,4 +279,40 @@ export class ActionsController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
+
+  @Post('guilds')
+  @ApiOperation({ summary: 'Trigger if there is new discord guild' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, discord guilds getted',
+  })
+  @ApiBody({
+    description: 'Webhook endpoint of the action discord guild.',
+    schema: {
+      type: 'object',
+      properties: {
+        webhookEndpoint: {
+          type: 'string',
+          example: 'http://api:8080/reaction/email',
+          description: 'url for the reaction',
+        },
+        user: {
+          type: 'string',
+          example: 'test@test.test',
+          description: 'user for the action',
+        }
+      },
+      required: ['webhookEndpoint', 'user'],
+    },
+  })
+  async getGuilds(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.actionsService.getGuilds(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message: message });
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+  }
 }

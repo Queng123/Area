@@ -214,11 +214,12 @@ export class ActionsService {
         throw userDatas.error;
       }
 
-      let datas = {
+      let lastDatas = {
         lastEmail: null,
+        numberOfGuilds: null,
       }
-      if (userDatas.data[0].datas !== null && userDatas.data[0].datas.lastEmail !== null) {
-        datas.lastEmail = userDatas.data[0].datas.lastEmail;
+      if (userDatas.data[0].datas !== null) {
+        lastDatas = userDatas.data[0].datas;
       }
 
       const credentials = await supabase.from('user_provider')
@@ -248,7 +249,7 @@ export class ActionsService {
         id: messageId,
       });
       const timestamp = message.data.payload.headers.find((header) => header.name === 'Date').value;
-      if (datas.lastEmail !== null && datas.lastEmail === timestamp) {
+      if (lastDatas.lastEmail !== null && lastDatas.lastEmail === timestamp) {
         return [200, 'success, no new email received'];
       }
       const url = body.webhookEndpoint + '?email=' + user + '&action=email';
@@ -271,9 +272,8 @@ export class ActionsService {
         };
         throw error;
       }
-      await supabase.from('profile').update({ datas: {
-        lastEmail: timestamp,
-      } }).eq('email', user);
+      lastDatas.lastEmail = timestamp;
+      await supabase.from('profile').update({ datas: lastDatas }).eq('email', user);
       return [200, 'success, email received'];
     } catch (error) {
       return [error.response.status, error.response.statusText];
@@ -408,6 +408,73 @@ export class ActionsService {
         throw error;
       }
       return [200, 'success, you have a pull request open'];
+    } catch (error) {
+      return [error.response.status, error.response.statusText];
+    }
+  }
+
+  async getGuilds(body: any): Promise<[number, string]> {
+    try {
+      const user = body.user;
+
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
+      }
+
+      const credentials = await supabase.from('user_provider')
+        .select('token')
+        .eq('user_id', user)
+        .eq('provider_id', 'Discord');
+
+      if (credentials.error) {
+        throw credentials.error;
+      }
+      let loadDatas = {
+        lastEmail: null,
+        numberOfGuilds: null,
+      }
+      if (userDatas.data[0].datas !== null) {
+        loadDatas = userDatas.data[0].datas;
+      }
+      if (loadDatas.numberOfGuilds === null) {
+        loadDatas.numberOfGuilds = -1;
+      }
+      const accessToken = credentials.data[0].token;
+      const response = await axios.get('https://discord.com/api/v9/users/@me/guilds', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (response.data.length <= loadDatas.numberOfGuilds) {
+        return [200, 'success, no new guilds'];
+      }
+      loadDatas.numberOfGuilds = response.data.length;
+      const url = body.webhookEndpoint + '?email=' + user + '&action=dsServer';
+      const res = await axios.post(url, {
+        subject: 'Discord warning',
+        html: `<p>Hi, you have a new Discord guild.</p>`,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status !== 201) {
+        const error = {
+          response: {
+            status: res.status,
+            data: {
+              statusText: res.statusText,
+            },
+          },
+        };
+        throw error;
+      }
+      await supabase.from('profile').update({ datas: loadDatas }).eq('email', user);
+      return [200, 'success, you have a new Discord guild'];
     } catch (error) {
       return [error.response.status, error.response.statusText];
     }
