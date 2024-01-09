@@ -85,16 +85,16 @@ export class AuthController {
   }
 
 
-  @Get('teams')
-  @UseGuards(AuthGuard('MSTeams'))
-  @ApiOperation({ summary: 'Launch the MSTeams OAuth2.0 process' })
+  @Get('deezer')
+  @UseGuards(AuthGuard('deezer'))
+  @ApiOperation({ summary: 'Launch the deezer OAuth2.0 process' })
   async loginTeams() {
     //
   }
 
-  @Get('teams/callback')
-  @UseGuards(AuthGuard('MSTeams'))
-  @ApiOperation({ summary: 'Handle MSTeams callback process' })
+  @Get('deezer/callback')
+  @UseGuards(AuthGuard('deezer'))
+  @ApiOperation({ summary: 'Handle deezer callback process' })
   @ApiResponse({
     status: 200,
     description: 'User successfully logged in.',
@@ -109,11 +109,11 @@ export class AuthController {
   })
   @ApiResponse({
     status: 409,
-    description: 'User already connected with MSteams.',
+    description: 'User already connected with deezer.',
   })
-  async teamsAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
+  async DeezerAuthRedirect(@Req() req: Request, @Res() res: Response): Promise<Response> {
     try {
-      const [statusCode, message] = await this.authService.MSTeamsLogin(req)
+      const [statusCode, message] = await this.authService.DeezerLogin(req)
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
       return res.status(statusCode).json({ message: message });
     } catch (error) {

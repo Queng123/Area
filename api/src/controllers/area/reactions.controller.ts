@@ -154,4 +154,34 @@ export class ReactionsController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Post('deezer')
+  @ApiOperation({ summary: 'Starts a random track' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, deezer music started',
+  })
+  @ApiParam({
+    name: 'email',
+    required: true,
+    description: 'Email of the user',
+    example: 'email.someone@provider.com',
+  })
+  @ApiParam({
+    name: 'action',
+    required: true,
+    description: 'Action link to this reaction',
+    example: 'star',
+  })
+  async startDeezer(@Res() res: Response, @Query('email') email, @Query('action') action, @Req()  req: Request ): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.reactionsService.startDeezer(email, action, req.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message: message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+  }
 }

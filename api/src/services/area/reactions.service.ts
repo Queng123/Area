@@ -103,6 +103,58 @@ export class ReactionsService {
     }
   }
 
+  async startDeezer(email: string, action: string, body: any): Promise<[number, string]> {
+    const access_token = await supabase.from('user_provider').select('token').eq('user_id', email).eq('provider_id', 'Deezer');
+    if (access_token.data.length === 0) {
+      return [401, 'error, User not logged in'];
+    }
+    const response = await axios.get('https://api.deezer.com/editorial/0/charts', {
+      params: {
+        access_token: access_token.data[0].token,
+      },
+    });
+    // Extract a random track from the response
+    const randomTrack = response.data.tracks.data[Math.floor(Math.random() * response.data.tracks.data.length)];
+    try {
+      const subject = "One of the top track of the day";
+      const html = `<p>Hi, here is the top track of the day.</p>
+      <p>Artist: ${randomTrack.artist.name}
+      Track: ${randomTrack.title}
+      Album: ${randomTrack.album.title}
+      We think you will like it !
+      Give it a try ! https://www.deezer.com/track/${randomTrack.id}</p>
+      <img src="${randomTrack.album.cover_big}">
+      <footer>Deezer x AREA</footer>`;
+
+      const mailjet = require('node-mailjet')
+        .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+      const res = mailjet
+        .post("send", {'version': 'v3.1'})
+        .request({
+          "Messages":[
+            {
+              "From": {
+                "Email": "quentin.brejoin@gmail.com",
+                "Name": "Area"
+              },
+              "To": [
+                {
+                  "Email": email,
+                  "Name": email.split('@')[0]
+                }
+              ],
+              "Subject": subject,
+              "HTMLPart": html,
+            }
+          ]
+        });
+      return [201, 'reaction succeed'];
+    } catch (error) {
+      console.log("error", error)
+      return error;
+    }
+  }
+
   async deleteReaction(reactionName: string): Promise<[number, string]> {
     try {
       const response = await supabase.from('reaction').delete().match({ name: reactionName });
