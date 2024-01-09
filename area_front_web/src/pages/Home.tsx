@@ -18,6 +18,9 @@ export function Home() {
     const clientSCOPEdiscord = process.env.DISCORD_CLIENT_SCOPE;
     const clientIDgithub = process.env.GITHUB_CLIENT_ID;
     const clientSCOPEgithub = process.env.GITHUB_CLIENT_SCOPE;
+    const clientIDmsteams = process.env.MSTEAMS_CLIENT_ID;
+    const clientSCOPEmsteams = process.env.MSTEAMS_CLIENT_SCOPE;
+    const clientSECRETmsteams = process.env.MSTEAMS_CLIENT_SECRET;
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const [username, setUsername] = useState('');
@@ -109,7 +112,16 @@ export function Home() {
     };
 
     const MsteamsLogin = async () => {
-        console.log("Msteams");
+        const authCallbackURL = encodeURIComponent(`${BASE_URL}/auth/teams/callback`);
+        const link = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientIDmsteams}&scope=${clientSCOPEmsteams}&redirect_uri=${authCallbackURL}&response_type=code&client_secret=${clientSECRETmsteams}`;
+
+        const canOpen = window.open(link, '_blank');
+        if (canOpen) {
+            canOpen.focus();
+        }
+        else {
+            alert('Please allow popups for this website');
+        }
     };
 
     const SpotifyLogin = async () => {
