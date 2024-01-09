@@ -81,7 +81,7 @@ export class ReactionsService {
         }
       });
       const playMusic = await axios.put('https://api.spotify.com/v1/me/player/play', {
-        contextUri: lastMusic.data.items[0].context.uri,
+        contextUri: lastMusic.data.items[0].track.album.uri,
         uris: [lastMusic.data.items[0].track.uri],
         offset: {
           position: 0
