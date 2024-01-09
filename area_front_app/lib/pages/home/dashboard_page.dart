@@ -249,7 +249,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
 
   void _onAreaCreateButtonPressed() {
     ApiArea.createArea(actionSelected, reactionSelected).then((value) {
-      if (value == 200) {
+      if (value == 201) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Area created : $actionSelected-$reactionSelected',

@@ -7,11 +7,10 @@ import 'package:area_front_app/api/api_endpoints.dart';
 class ApiAction {
   static Future<List<Map<String, String>>> getActions() async {
     final http.Response response = await ApiRequests.get(ApiRoutes.actions);
-
     if (response.statusCode == 200) {
       try {
         final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-        final List<dynamic> actionsData = jsonResponse['actions'];
+        final List<dynamic> actionsData = jsonResponse['message'];
 
         final List<Map<String, String>> actions =
             actionsData.map<Map<String, String>>((dynamic item) {

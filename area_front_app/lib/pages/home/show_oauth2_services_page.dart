@@ -54,7 +54,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     super.initState();
     _loadProfileData();
 
-     Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+    Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       _reloadProfileData();
     });
   }

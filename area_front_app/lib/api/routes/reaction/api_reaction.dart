@@ -11,7 +11,7 @@ class ApiReaction {
     if (response.statusCode == 200) {
       try {
         final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-        final List<dynamic> reactionData = jsonResponse['actions'];
+        final List<dynamic> reactionData = jsonResponse['message'];
 
         final List<Map<String, String>> reaction =
             reactionData.map<Map<String, String>>((dynamic item) {

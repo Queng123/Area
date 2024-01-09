@@ -59,7 +59,7 @@ class _CopyAreaState extends State<CopyArea> {
                 ApiArea.createArea(profiles[currentIndex].reactionname,
                         profiles[currentIndex].actionname)
                     .then((value) {
-                  if (value == 200) {
+                  if (value == 201) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Area Copied'),

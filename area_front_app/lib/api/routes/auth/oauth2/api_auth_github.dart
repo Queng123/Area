@@ -3,8 +3,8 @@ import 'package:area_front_app/api/api_endpoints.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiGitHub {
-  static String clientID = dotenv.env['CLIENT_ID'] ?? '';
-  static String clientSCOPE = dotenv.env['CLIENT_SCOPE'] ?? '';
+  static String clientID = dotenv.env['GITHUB_CLIENT_ID'] ?? '';
+  static String clientSCOPE = dotenv.env['GITHUB_CLIENT_SCOPE'] ?? '';
 
   Future<void> authenticateWithGitHub() async {
     if (clientID.isEmpty) {
