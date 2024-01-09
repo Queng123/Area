@@ -102,11 +102,15 @@ Fixes Mobile:
 - [ ] Fix mobile app (SplashScreen) - Estimated time: 2 days - Assigned to: VyOk
 - [ ] Fix mobile app (ModelsData) - Estimated time: 2 days - Assigned to: VyOk
 
-### Sprint 4 - Bonus -  1 week
+### Sprint 4 - EndGame - 1 week
 
-The goal of this sprint is to finish the project. Note that, the project can be considered finished even if all the features are not implemented, advanced features is the main focus of this sprint.
-This includes the following tasks:
-- [ ] Add more services
-- [ ] Add more actions
-- [ ] Add more reactions
-- [ ] Add more triggers
+In this sprint, we will add the last features to the project. This includes the following tasks:
+
+- [ ] Add 6 actions/reactions (from providers) - Estimated time: 2 days - Assigned to: Queng & YungSnoww
+- [ ] Add tests cases - Estimated time: 2 days - Assigned to: everyone
+- [ ] Update the documentation - Estimated time: 2 days - Assigned to: YungSnoww
+- [ ] Check if the project is valid with the PDF - Estimated time: 2 days - Assigned to: YungSnoww & VyOk
+- [ ] Fix the mobile app UI/UX (seen in the follow up sprint) - Estimated time: 2 days - Assigned to: VyOk
+- [ ] Finish the web design UI/UX (seen in the follow up sprint) - Estimated time: 2 days - Assigned to: Matifire
+- [ ] Fix the web app UI/UX (seen in the follow up sprint) - Estimated time: 2 days - Assigned to: Matifire
+
