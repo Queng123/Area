@@ -10,6 +10,11 @@ import githubLogo from '../assets/github.png';
 import msteamsLogo from '../assets/msteams.png';
 import spotifyLogo from '../assets/spotify.png';
 
+interface Service {
+    name: string;
+    isConnected: boolean;
+}
+
 export function Home() {
     const navigate = useNavigate();
     const clientID = process.env.GOOGLE_CLIENT_ID;
@@ -26,8 +31,15 @@ export function Home() {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const [username, setUsername] = useState('');
+    const [statusService, setStatusService] = useState<Service[]>([]);
 
     const [password, setPassword] = useState<string>('');
+
+    const [isGoogleConnected, setIsGoogleConnected] = useState(false);
+    const [isDiscordConnected, setIsDiscordConnected] = useState(false);
+    const [isGithubConnected, setIsGithubConnected] = useState(false);
+    const [isMsteamsConnected, setIsMsteamsConnected] = useState(false);
+    const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
@@ -67,10 +79,44 @@ export function Home() {
                 console.log('Username:', username);
                 console.log('Server responsssse:', response.data);
             } catch (error) {
-                console.error('Erreur lors de la requête GET', error);
+                console.error('Error with the request GET', error);
             }
         };
+        const statusServices = async () => {
+            try {
+                const response = await axios.get(`${BASE_URL}/user/services`)
+                const services: Service[] = JSON.parse(response.data.message);
 
+                services.forEach((service) => {
+                    console.log(`Service: ${service.name}, Connected: ${service.isConnected}`);
+                    switch (service.name) {
+                        case 'Google':
+                            setIsGoogleConnected(service.isConnected);
+                            break;
+                        case 'Discord':
+                            setIsDiscordConnected(service.isConnected);
+                            break;
+                        case 'Github':
+                            setIsGithubConnected(service.isConnected);
+                            break;
+                        case 'Msteams':
+                            setIsMsteamsConnected(service.isConnected);
+                            break;
+                        case 'Spotify':
+                            setIsSpotifyConnected(service.isConnected);
+                            break;
+                        default:
+                            break;
+                    }
+                });
+
+                setStatusService(services);
+            } catch (error) {
+                console.error('Error with the request GET');
+            }
+        }
+
+        statusServices();
         fetchData();
     }, []);
 
@@ -146,18 +192,23 @@ export function Home() {
                 <div className="service-boxes">
                     <div className="service-box box-color">
                         <img src={googleLogo} alt="Logo" className='icons' onClick={GoogleLogin}/>
+                        <text className='text'>{isGoogleConnected ? 'Connected' : 'Not Connected'}</text>
                     </div>
                     <div className="service-box box-color">
                         <img src={discordLogo} alt="Logo" className='icons' onClick={DiscordLogin}/>
+                        <text className='text'>{isDiscordConnected ? 'Connected' : 'Not Connected'}</text>
                     </div>
                     <div className="service-box box-color">
                         <img src={githubLogo} alt="Logo" className='icons' onClick={GithubLogin}/>
+                        <text className='text'>{isGithubConnected ? 'Connected' : 'Not Connected'}</text>
                     </div>
                     <div className="service-box box-color">
                         <img src={msteamsLogo} alt="Logo" className='icons' onClick={MsteamsLogin}/>
+                        <text className='text'>{isMsteamsConnected ? 'Connected' : 'Not Connected'}</text>
                     </div>
                     <div className="service-box box-color">
                         <img src={spotifyLogo} alt="Logo" className='icons' onClick={SpotifyLogin}/>
+                        <text className='text'>{isSpotifyConnected ? 'Connected' : 'Not Connected'}</text>
                     </div>
                 </div>
             </div>
