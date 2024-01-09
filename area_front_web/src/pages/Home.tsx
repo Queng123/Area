@@ -21,6 +21,8 @@ export function Home() {
     const clientIDmsteams = process.env.MSTEAMS_CLIENT_ID;
     const clientSCOPEmsteams = process.env.MSTEAMS_CLIENT_SCOPE;
     const clientSECRETmsteams = process.env.MSTEAMS_CLIENT_SECRET;
+    const clientIDspotify = process.env.SPOTIFY_CLIENT_ID;
+    const clientSCOPEspotify = process.env.SPOTIFY_CLIENT_SCOPE;
     const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const [username, setUsername] = useState('');
@@ -125,7 +127,16 @@ export function Home() {
     };
 
     const SpotifyLogin = async () => {
-        console.log("Spotify");
+        const authCallbackURL = encodeURIComponent(`${BASE_URL}/auth/spotify/callback`);
+        const link = `https://accounts.spotify.com/authorize?client_id=${clientIDspotify}&response_type=code&redirect_uri=${authCallbackURL}&scope=${clientSCOPEspotify}`;
+
+        const canOpen = window.open(link, '_blank');
+        if (canOpen) {
+            canOpen.focus();
+        }
+        else {
+            alert('Please allow popups for this website');
+        }
     };
 
     return (

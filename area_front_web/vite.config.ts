@@ -19,7 +19,10 @@ export default defineConfig(({ mode }) => {
       'process.env.MSTEAMS_CLIENT_ID': JSON.stringify(env.MSTEAMS_CLIENT_ID),
       'process.env.MSTEAMS_CLIENT_SECRET': JSON.stringify(env.MSTEAMS_CLIENT_SECRET),
       'process.env.MSTEAMS_CLIENT_SCOPE': JSON.stringify(env.MSTEAMS_CLIENT_SCOPE),
+      'process.env.SPOTIFY_CLIENT_ID': JSON.stringify(env.SPOTIFY_CLIENT_ID),
+      'process.env.SPOTIFY_CLIENT_SCOPE': JSON.stringify(env.SPOTIFY_CLIENT_SCOPE),
     },
+
     plugins: [react()],
     test: {
       globals: true,
