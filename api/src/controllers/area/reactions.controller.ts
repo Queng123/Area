@@ -185,6 +185,37 @@ export class ReactionsController {
     }
   }
 
+  @Post('recommandation')
+  @ApiOperation({ summary: 'Send spotify custom recommandation' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, spotify custom recommandation sent',
+  })
+  @ApiParam({
+    name: 'email',
+    required: true,
+    description: 'Email of the user',
+    example: 'test@test.test',
+  })
+  @ApiParam({
+    name: 'action',
+    required: true,
+    description: 'Action link to this reaction',
+    example: 'star',
+  })
+  async sendSpotifyRecommandation(@Res() res: Response, @Query('email') email, @Query('action') action, @Req()  req: Request ): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.reactionsService.getSpotifyRecommendations(email, action, req.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message: message });
+    } catch (error) {
+      console.error('Error during provider creation:', error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
+    }
+
+  }
+
   @Post('github')
   @ApiOperation({ summary: 'Change user status to busy' })
   @ApiResponse({

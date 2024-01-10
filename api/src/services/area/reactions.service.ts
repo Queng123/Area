@@ -156,6 +156,63 @@ export class ReactionsService {
     }
   }
 
+  async getSpotifyRecommendations(email: string, action: string, body: any): Promise<[number, string]> {
+    const rawToken = await supabase.from('user_provider').select('token').eq('user_id', email).eq('provider_id', 'Spotify');
+    if (rawToken.data.length === 0) {
+      return [401, 'error, User not logged in'];
+    }
+    console.log("rawToken", rawToken.data[0].token)
+    try {
+      const access_token = rawToken.data[0].token;
+      const response = await axios.get('https://api.spotify.com/v1/recommendations', {
+        headers: {
+          'Authorization': `Bearer ${access_token}`
+        },
+        params: {
+          limit: 5,
+          seed_genres: 'hip-hop, rap, rock',
+        }
+      });
+
+      const subject = "Your recommendations";
+      let html = `<p>Hi, here are your recommendations.</p>`;
+      response.data.tracks.forEach((track: any) => {
+        html += `<p>Artist: ${track.artists[0].name}
+        Track: ${track.name}
+        Album: ${track.album.name}
+        Give it a try ! https://open.spotify.com/track/${track.id}</p>
+        <img src="${track.album.images[0].url}">`;
+      });
+      html += `<footer>Spotify x AREA - Triggered by: ${action}</footer>`;
+      const mailjet = require('node-mailjet')
+        .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+      const res = mailjet
+        .post("send", {'version': 'v3.1'})
+        .request({
+          "Messages":[
+            {
+              "From": {
+                "Email": "quentin.brejoin@gmail.com",
+                "Name": "Area"
+              },
+              "To": [
+                {
+                  "Email": email,
+                  "Name": email.split('@')[0]
+                }
+              ],
+              "Subject": subject,
+              "HTMLPart": html,
+            }
+          ]
+        });
+      return [201, 'reaction succeed'];
+    } catch (error) {
+      console.log("error", error)
+      return error;
+    }
+  }
+
   async changeStatus(email: string, action: string, body: any): Promise<[number, string]> {
     try {
       const accessToken = await supabase.from('user_provider').select('token').eq('user_id', email).eq('provider_id', 'Github');
