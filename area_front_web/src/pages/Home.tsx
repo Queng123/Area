@@ -70,55 +70,66 @@ export function Home() {
         setPassword('');
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`${BASE_URL}/user`);
-                const userData = response.data;
-                setUsername(userData.message);
-                console.log('Username:', username);
-                console.log('Server responsssse:', response.data);
-            } catch (error) {
-                console.error('Error with the request GET', error);
-            }
-        };
-        const statusServices = async () => {
-            try {
-                const response = await axios.get(`${BASE_URL}/user/services`)
-                const services: Service[] = JSON.parse(response.data.message);
-
-                services.forEach((service) => {
-                    console.log(`Service: ${service.name}, Connected: ${service.isConnected}`);
-                    switch (service.name) {
-                        case 'Google':
-                            setIsGoogleConnected(service.isConnected);
-                            break;
-                        case 'Discord':
-                            setIsDiscordConnected(service.isConnected);
-                            break;
-                        case 'Github':
-                            setIsGithubConnected(service.isConnected);
-                            break;
-                        case 'Msteams':
-                            setIsMsteamsConnected(service.isConnected);
-                            break;
-                        case 'Spotify':
-                            setIsSpotifyConnected(service.isConnected);
-                            break;
-                        default:
-                            break;
-                    }
-                });
-
-                setStatusService(services);
-            } catch (error) {
-                console.error('Error with the request GET');
-            }
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/user`);
+            const userData = response.data;
+            setUsername(userData.message);
+        } catch (error) {
+            console.error('Error with the request GET', error);
         }
+    };
 
+    const statusServices = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/user/services`)
+            const services: Service[] = JSON.parse(response.data.message);
+
+            services.forEach((service) => {
+                switch (service.name) {
+                    case 'Google':
+                        setIsGoogleConnected(service.isConnected);
+                        break;
+                    case 'Discord':
+                        setIsDiscordConnected(service.isConnected);
+                        break;
+                    case 'Github':
+                        setIsGithubConnected(service.isConnected);
+                        break;
+                    case 'Msteams':
+                        setIsMsteamsConnected(service.isConnected);
+                        break;
+                    case 'Spotify':
+                        setIsSpotifyConnected(service.isConnected);
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            setStatusService(services);
+        } catch (error) {
+            console.error('Error with the request GET');
+        }
+    }
+
+    useEffect(() => {
         statusServices();
         fetchData();
     }, []);
+
+    const DisconnectService = async (serviceName: string) => {
+        const requestData = {
+            data: { service: serviceName },
+        };
+        try {
+            const response = await axios.delete(`${BASE_URL}/user/services`, requestData);
+            console.log('Server response:', response.data);
+            await statusServices();
+        } catch (error) {
+            console.error('Error with the DELETE request', error);
+        }
+    };
 
     const GoogleLogin = async () => {
         const authCallbackURL = encodeURIComponent(`${BASE_URL}/auth/google/callback`);
@@ -127,6 +138,9 @@ export function Home() {
         const canOpen = window.open(link, '_blank');
         if (canOpen) {
             canOpen.focus();
+            const checkLogin = setInterval(async () => {
+                await statusServices();
+            }, 3000);
         }
         else {
             alert('Please allow popups for this website');
@@ -140,10 +154,14 @@ export function Home() {
         const canOpen = window.open(link, '_blank');
         if (canOpen) {
             canOpen.focus();
+            const checkLogin = setInterval(async () => {
+                await statusServices();
+            }, 3000);
         }
         else {
             alert('Please allow popups for this website');
         }
+        await statusServices();
     };
 
     const GithubLogin = async () => {
@@ -153,6 +171,9 @@ export function Home() {
         const canOpen = window.open(link, '_blank');
         if (canOpen) {
             canOpen.focus();
+            const checkLogin = setInterval(async () => {
+                await statusServices();
+            }, 3000);
         }
         else {
             alert('Please allow popups for this website');
@@ -166,6 +187,9 @@ export function Home() {
         const canOpen = window.open(link, '_blank');
         if (canOpen) {
             canOpen.focus();
+            const checkLogin = setInterval(async () => {
+                await statusServices();
+            }, 3000);
         }
         else {
             alert('Please allow popups for this website');
@@ -179,6 +203,9 @@ export function Home() {
         const canOpen = window.open(link, '_blank');
         if (canOpen) {
             canOpen.focus();
+            const checkLogin = setInterval(async () => {
+                await statusServices();
+            }, 3000);
         }
         else {
             alert('Please allow popups for this website');
@@ -192,23 +219,28 @@ export function Home() {
                 <div className="service-boxes">
                     <div className="service-box box-color">
                         <img src={googleLogo} alt="Logo" className='icons' onClick={GoogleLogin}/>
-                        <text className='text'>{isGoogleConnected ? 'Connected' : 'Not Connected'}</text>
+                        <div className='text'>{isGoogleConnected ? 'Connected' : 'Not Connected'}</div>
+                        <button className='service-button' onClick={() => DisconnectService('Google')}>Logout</button>
                     </div>
                     <div className="service-box box-color">
                         <img src={discordLogo} alt="Logo" className='icons' onClick={DiscordLogin}/>
-                        <text className='text'>{isDiscordConnected ? 'Connected' : 'Not Connected'}</text>
+                        <div className='text'>{isDiscordConnected ? 'Connected' : 'Not Connected'}</div>
+                        <button className='service-button' onClick={() => DisconnectService('Discord')}>Logout</button>
                     </div>
                     <div className="service-box box-color">
                         <img src={githubLogo} alt="Logo" className='icons' onClick={GithubLogin}/>
-                        <text className='text'>{isGithubConnected ? 'Connected' : 'Not Connected'}</text>
+                        <div className='text'>{isGithubConnected ? 'Connected' : 'Not Connected'}</div>
+                        <button className='service-button' onClick={() => DisconnectService('Github')}>Logout</button>
                     </div>
                     <div className="service-box box-color">
                         <img src={msteamsLogo} alt="Logo" className='icons' onClick={MsteamsLogin}/>
-                        <text className='text'>{isMsteamsConnected ? 'Connected' : 'Not Connected'}</text>
+                        <div className='text'>{isMsteamsConnected ? 'Connected' : 'Not Connected'}</div>
+                        <button className='service-button' onClick={() => DisconnectService('msteams')}>Logout</button>
                     </div>
                     <div className="service-box box-color">
                         <img src={spotifyLogo} alt="Logo" className='icons' onClick={SpotifyLogin}/>
-                        <text className='text'>{isSpotifyConnected ? 'Connected' : 'Not Connected'}</text>
+                        <div className='text'>{isSpotifyConnected ? 'Connected' : 'Not Connected'}</div>
+                        <button className='service-button' onClick={() => DisconnectService('Spotify')}>Logout</button>
                     </div>
                 </div>
             </div>
@@ -225,7 +257,6 @@ export function Home() {
                     onChange={handlePasswordChange}
                 />
             </div>
-
         </div>
     )
 }

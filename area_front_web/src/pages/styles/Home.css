@@ -93,3 +93,21 @@ input[type='password'] {
     border-radius: 10px;
     margin-top: 10px;
 }
+
+.service-button {
+    background-color: lightgray;
+    border: none;
+    color: black;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.service-button:hover {
+    background-color: red;
+}
