@@ -120,7 +120,7 @@ class _SettingPageState extends State<SettingPage> {
               items: [
                 SettingsItem(
                   onTap: () {
-                    CustomDialog.dialogSignOut(context);
+                    CustomDialog.dialogSignOut(context, userProfile);
                   },
                   icons: Icons.exit_to_app_rounded,
                   title: "Sign Out",
@@ -131,7 +131,7 @@ class _SettingPageState extends State<SettingPage> {
               items: [
                 SettingsItem(
                   onTap: () {
-                    CustomDialog.dialogDeleteAccount(context);
+                    CustomDialog.dialogDeleteAccount(context, userProfile);
                   },
                   icons: CupertinoIcons.delete,
                   iconStyle: IconStyle(

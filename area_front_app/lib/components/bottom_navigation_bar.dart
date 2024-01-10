@@ -17,7 +17,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       _selectedIndex = index;
       List<String> routeNames = ['/home', '/profile', '/dashboard', '/setting'];
 
-      if (index >= 1 && index < routeNames.length) {
+      if (index >= 0 && index < routeNames.length) {
         Navigator.pushNamed(context, routeNames[index]);
       }
     });
@@ -33,18 +33,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           backgroundColor: Colors.black,
           color: Colors.white,
           activeColor: Colors.white,
-          tabBackgroundGradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomRight,
-            colors: [Colors.grey[800]!, Colors.grey[600]!],
-          ),
-          gap: 8,
           padding: const EdgeInsets.all(16),
           tabs: const [
-            GButton(icon: Icons.home, text: 'Home'),
-            GButton(icon: Icons.person, text: 'Profile'),
-            GButton(icon: Icons.dashboard, text: 'Dashboard'),
-            GButton(icon: Icons.settings, text: 'Settings'),
+            GButton(icon: Icons.home),
+            GButton(icon: Icons.person),
+            GButton(icon: Icons.dashboard),
+            GButton(icon: Icons.settings),
           ],
           selectedIndex: _selectedIndex,
           onTabChange: _onItemTapped,

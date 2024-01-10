@@ -142,7 +142,7 @@ class CustomDialog {
     );
   }
 
-  static void dialogSignOut(BuildContext context) {
+  static void dialogSignOut(BuildContext context, userProfile) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -171,6 +171,7 @@ class CustomDialog {
               onPressed: () {
                 ApiLogout.logout().then((statusCode) {
                   if (statusCode == 200) {
+                    userProfile.isConnect = false;
                     Navigator.pushNamed(context, '/login');
                   }
                 });
@@ -185,7 +186,7 @@ class CustomDialog {
     );
   }
 
-  static void dialogDeleteAccount(BuildContext context) {
+  static void dialogDeleteAccount(BuildContext context, userProfile) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -215,6 +216,7 @@ class CustomDialog {
               onPressed: () {
                 ApiDeleteAccount.deleteAccount().then((statusCode) {
                   if (statusCode == 200) {
+                    userProfile.isConnect = false;
                     Navigator.pushNamed(context, '/login');
                   }
                 });

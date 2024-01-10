@@ -40,6 +40,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
   bool isShowOAuth2Services = false;
   bool isShowMiniDash = true;
   bool isShowCopyArea = false;
+  bool isArrowUp = false;
 
   List myOAuth2Services = [
     ["Github", "lib/images/github.png"],
@@ -49,14 +50,18 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     ["MSTeams", "lib/images/msteams.png"],
   ];
 
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     _loadProfileData();
 
-    Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      _reloadProfileData();
-    });
+    if (userProfile.isConnect) {
+      Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+        _reloadProfileData();
+      });
+    }
   }
 
   Future<void> _loadProfileData() async {
@@ -79,16 +84,59 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     });
   }
 
+  int showAuthServices() {
+    int count = 0;
+    for (var service in userProfile.serviceStatus.entries) {
+      if (service.value) {
+        count++;
+      }
+    }
+    return count;
+  }
+
   ListView buildOAuth2ServicesList() {
     return ListView.builder(
-      itemCount: (myOAuth2Services.length / 2).ceil(),
+      controller: _scrollController,
+      itemCount: (myOAuth2Services.length / 2).ceil() +
+          (myOAuth2Services.length > 4 ? 1 : 0),
       padding: const EdgeInsets.symmetric(horizontal: 25),
       itemBuilder: (context, index) {
+        if (myOAuth2Services.length > 4 &&
+            index == (myOAuth2Services.length / 2).ceil() - 1) {
+          return GestureDetector(
+            onTap: () {
+              if (isArrowUp == false) {
+                _scrollController.animateTo(
+                  _scrollController.position.maxScrollExtent,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.fastOutSlowIn,
+                );
+              } else {
+                _scrollController.animateTo(
+                  _scrollController.position.minScrollExtent,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.fastOutSlowIn,
+                );
+              }
+              setState(() {
+                isArrowUp = !isArrowUp;
+              });
+            },
+            child: Center(
+              child: Icon(
+                isArrowUp ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                size: 36,
+                color: Colors.black,
+              ),
+            ),
+          );
+        }
+
         int startIndex = index * 2;
         int endIndex = startIndex + 2;
-        if (endIndex > myOAuth2Services.length) {
-          endIndex = myOAuth2Services.length;
-        }
+        startIndex = startIndex.clamp(0, myOAuth2Services.length - 1);
+        endIndex = endIndex.clamp(0, myOAuth2Services.length);
+
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(endIndex - startIndex, (i) {
@@ -215,15 +263,20 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                     ),
                   ),
                   const Spacer(),
-                  CircleAvatar(
-                    backgroundColor: Colors.grey.shade800,
-                    radius: 17.5,
-                    child: ClipOval(
-                      child: Image.network(
-                        userProfile.profilePic,
-                        width: 35,
-                        height: 35,
-                        fit: BoxFit.cover,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/profile');
+                    },
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey.shade800,
+                      radius: 17.5,
+                      child: ClipOval(
+                        child: Image.network(
+                          userProfile.profilePic,
+                          width: 35,
+                          height: 35,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   )
@@ -261,6 +314,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                         isShowOAuth2Services = !isShowOAuth2Services;
                         isShowMiniDash = false;
                         isShowCopyArea = false;
+                        isArrowUp = false;
                       });
                     },
                   ),
@@ -270,7 +324,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Text(
-                "Connect your OAuth2 services to Area",
+                "You have ${showAuthServices()}/5 services connected",
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.grey.shade800,
@@ -309,6 +363,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                         isShowMiniDash = !isShowMiniDash;
                         isShowOAuth2Services = false;
                         isShowCopyArea = false;
+                        isArrowUp = false;
                       });
                     },
                   ),
@@ -373,6 +428,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                         isShowCopyArea = !isShowCopyArea;
                         isShowOAuth2Services = false;
                         isShowMiniDash = false;
+                        isArrowUp = false;
                       });
                     },
                   ),

@@ -7,17 +7,20 @@ class Profile {
   String profilePic;
   Map<String, bool> serviceStatus;
   List<Map<String, String>> listAreas = [];
+  bool isConnect = false;
+
   Profile(
       {this.username = '',
       this.serviceStatus = const {},
       this.listAreas = const [],
-      this.profilePic = 'https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg'}
-      );
+      this.profilePic =
+          'https://i.pinimg.com/564x/8b/6e/c6/8b6ec60427f9b17c1d9aaf4c415babe3.jpg'});
 
   Future<void> loadProfileData() async {
     username = await ApiUsername.getUsername();
     serviceStatus = await ApiUserServices.isServiceConnected();
     listAreas = await ApiArea.getArea();
+    isConnect = true;
   }
 
   static Future<Profile> loadProfile() async {

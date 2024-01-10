@@ -99,14 +99,39 @@ class MiniDashBoard extends StatelessWidget {
                                   child: const Icon(Icons.delete,
                                       color: Colors.white),
                                 ),
-                                child: ListTile(
-                                  title: Text(
-                                    '${area['action_id']} - ${area['reaction_id']}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
+                                secondaryBackground: Container(
+                                  color: Colors.red,
+                                  child: const Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10),
+                                      child: Icon(Icons.delete,
+                                          color: Colors.white),
                                     ),
+                                  ),
+                                ),
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  title: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Text(
+                                        '${area['action_id']} - ${area['reaction_id']}',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const Positioned(
+                                        right: 0,
+                                        child: Icon(
+                                          Icons.arrow_back_ios,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               );

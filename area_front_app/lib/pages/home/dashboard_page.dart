@@ -1,3 +1,4 @@
+import 'package:area_front_app/components/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:area_front_app/components/generic_button.dart';
@@ -75,18 +76,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
           'DashBoard',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.grey[300],
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
-        ),
+        automaticallyImplyLeading: false,
       ),
       backgroundColor: Colors.grey[300],
       body: Column(
@@ -110,7 +102,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
               reactionSelected = value;
             });
           }, listReactions),
-          const SizedBox(height: 80),
+          const SizedBox(height: 118),
           GenericButton(
             onTap: _onAreaCreateButtonPressed,
             buttonText: "Create Area",
@@ -124,6 +116,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
           ),
         ],
       ),
+      bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
 

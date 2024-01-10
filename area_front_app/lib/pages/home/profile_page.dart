@@ -1,3 +1,4 @@
+import 'package:area_front_app/components/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
 import 'package:area_front_app/components/styled_text_field.dart';
@@ -41,19 +42,11 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: Colors.grey[300],
+        automaticallyImplyLeading: false,
         title: const Text(
           "Profile",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/home');
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_rounded,
-            color: Colors.black,
           ),
         ),
       ),
@@ -81,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 300),
+                const SizedBox(height: 200),
                 GenericButton(
                   onTap: () {
                     if (_formKey.currentState?.validate() ?? false) {
@@ -102,6 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
+      bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
 }
