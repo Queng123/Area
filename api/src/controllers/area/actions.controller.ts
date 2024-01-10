@@ -351,4 +351,40 @@ export class ActionsController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     }
   }
+
+  @Post('deezer')
+  @ApiOperation({ summary: 'Trigger if there is new deezer song in like playlist' })
+  @ApiResponse({
+    status: 201,
+    description: 'success, deezer song getted',
+  })
+  @ApiBody({
+    description: 'Webhook endpoint of the action discord guild.',
+    schema: {
+      type: 'object',
+      properties: {
+        webhookEndpoint: {
+          type: 'string',
+          example: 'http://api:8080/reaction/email',
+          description: 'url for the reaction',
+        },
+        user: {
+          type: 'string',
+          example: 'email.test@area.eu',
+          description: 'user for the action',
+        }
+      },
+      required: ['webhookEndpoint', 'user'],
+    },
+  })
+  async getDeezer(@Res() res: Response, @Req() request: Request): Promise<Response> {
+    try {
+      const [statusCode, message] = await this.actionsService.getDeezerLike(request.body);
+
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+      return res.status(statusCode).json({ message: message });
+    } catch (error) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    }
+  }
 }

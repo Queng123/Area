@@ -218,6 +218,7 @@ export class ActionsService {
         lastEmail: null,
         numberOfGuilds: null,
         lastMusicSpotify: null,
+        lastDeezerMusic: null,
       }
       if (userDatas.data[0].datas !== null) {
         lastDatas = userDatas.data[0].datas;
@@ -438,6 +439,7 @@ export class ActionsService {
         lastEmail: null,
         numberOfGuilds: null,
         lastMusicSpotify: null,
+        lastDeezerMusic: null,
       }
       if (userDatas.data[0].datas !== null) {
         loadDatas = userDatas.data[0].datas;
@@ -506,6 +508,7 @@ export class ActionsService {
         lastEmail: null,
         numberOfGuilds: null,
         lastMusicSpotify: null,
+        lastDeezerMusic: null,
       }
       if (userDatas.data[0].datas !== null) {
         loadDatas = userDatas.data[0].datas;
@@ -524,6 +527,76 @@ export class ActionsService {
       const url = body.webhookEndpoint + '?email=' + user + '&action=spotify';
       const res = await axios.post(url, {
         subject: 'Spotify warning',
+        html: `<p>Hi, you have a new music added.</p>`,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status !== 201) {
+        const error = {
+          response: {
+            status: res.status,
+            data: {
+              statusText: res.statusText,
+            },
+          },
+        };
+        throw error;
+      }
+      await supabase.from('profile').update({ datas: loadDatas }).eq('email', user);
+      return [200, 'success, you have a new music added'];
+    } catch (error) {
+      return [error.response.status, error.response.statusText];
+    }
+  }
+
+  async getDeezerLike(body: any): Promise<[number, string]> {
+    /**
+     * This methods will check if the user has liked a new song on Deezer
+     * **/
+    try {
+      const user = body.user;
+
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
+      }
+
+      const credentials = await supabase.from('user_provider')
+        .select('token')
+        .eq('user_id', user)
+        .eq('provider_id', 'Deezer');
+
+      if (credentials.error) {
+        throw credentials.error;
+      }
+      let loadDatas = {
+        lastEmail: null,
+        numberOfGuilds: null,
+        lastMusicSpotify: null,
+        lastDeezerMusic: null,
+      }
+      if (userDatas.data[0].datas !== null) {
+        loadDatas = userDatas.data[0].datas;
+      }
+      const accessToken = credentials.data[0].token;
+      const playlist = await axios.get('https://api.deezer.com/user/me/tracks', {
+        params: {
+          access_token: accessToken,
+        },
+      });
+      console.log(playlist.data.total);
+      if (loadDatas.lastDeezerMusic !== null && loadDatas.lastDeezerMusic === playlist.data.total) {
+        return [200, 'success, no new music added'];
+      }
+      loadDatas.lastDeezerMusic = playlist.data.total;
+      const url = body.webhookEndpoint + '?email=' + user + '&action=deezer';
+      const res = await axios.post(url, {
+        subject: 'Deezer warning',
         html: `<p>Hi, you have a new music added.</p>`,
       }, {
         headers: {
