@@ -23,8 +23,8 @@ class ApiRoutes {
   static const String authSpotify = 'auth/spotify/callback';
   static const String authorizeSpotify =
       'https://accounts.spotify.com/authorize?';
-  static const String authMSTeams = 'auth/teams/callback';
-  static const String authorizeMSTeams = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?';
+  static const String authDeezer = 'auth/deezer/callback';
+  static const String authorizeDeezer = 'https://connect.deezer.com/oauth/auth.php?';
   static const String authDiscord = 'auth/discord/callback';
   static const String authorizeDiscord = 'https://discord.com/api/oauth2/authorize?';
 }

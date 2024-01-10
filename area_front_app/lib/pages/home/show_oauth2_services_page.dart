@@ -7,7 +7,7 @@ import 'package:area_front_app/components/mini_dashboard.dart';
 import 'package:area_front_app/pages/copyarea/copy_area_page.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_google.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_spotify.dart';
-import 'package:area_front_app/api/routes/auth/oauth2/api_auth_msteams.dart';
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_deezer.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_discord.dart';
 import 'dart:async';
 
@@ -47,7 +47,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     ["Discord", "lib/images/discord.png"],
     ["Google", "lib/images/google.png"],
     ["Spotify", "lib/images/spotify.png"],
-    ["MSTeams", "lib/images/msteams.png"],
+    ["Deezer", "lib/images/deezer.png"],
   ];
 
   final ScrollController _scrollController = ScrollController();
@@ -178,8 +178,8 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                         await ApiGoogle().authenticateWithGoogle();
                       case "Spotify":
                         await ApiSpotify().authenticateWithSpotify();
-                      case "MSTeams":
-                        await ApiMSTeams().authenticateWithMSTeams();
+                      case "Deezer":
+                        await ApiDeezer().authenticateWithDeezer();
                       case "Discord":
                         await ApiDiscord().authenticateWithDiscord();
                       default:
