@@ -217,6 +217,7 @@ export class ActionsService {
       let lastDatas = {
         lastEmail: null,
         numberOfGuilds: null,
+        lastMusicSpotify: null,
       }
       if (userDatas.data[0].datas !== null) {
         lastDatas = userDatas.data[0].datas;
@@ -436,6 +437,7 @@ export class ActionsService {
       let loadDatas = {
         lastEmail: null,
         numberOfGuilds: null,
+        lastMusicSpotify: null,
       }
       if (userDatas.data[0].datas !== null) {
         loadDatas = userDatas.data[0].datas;
@@ -475,6 +477,72 @@ export class ActionsService {
       }
       await supabase.from('profile').update({ datas: loadDatas }).eq('email', user);
       return [200, 'success, you have a new Discord guild'];
+    } catch (error) {
+      return [error.response.status, error.response.statusText];
+    }
+  }
+
+  async getSpotify(body: any): Promise<[number, string]> {
+    try {
+      const user = body.user;
+
+      const userDatas = await supabase.from('profile')
+        .select('datas')
+        .eq('email', user);
+
+      if (userDatas.error) {
+        throw userDatas.error;
+      }
+
+      const credentials = await supabase.from('user_provider')
+        .select('token')
+        .eq('user_id', user)
+        .eq('provider_id', 'Spotify');
+
+      if (credentials.error) {
+        throw credentials.error;
+      }
+      let loadDatas = {
+        lastEmail: null,
+        numberOfGuilds: null,
+        lastMusicSpotify: null,
+      }
+      if (userDatas.data[0].datas !== null) {
+        loadDatas = userDatas.data[0].datas;
+      }
+      const accessToken = credentials.data[0].token;
+      const playlist = await axios.get('https://api.spotify.com/v1/me/tracks?offset=0&limit=1', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      console.log(playlist.data.items[0].track.name);
+      if (loadDatas.lastMusicSpotify !== null && loadDatas.lastMusicSpotify === playlist.data.items[0].track.name) {
+        return [200, 'success, no new music added'];
+      }
+      loadDatas.lastMusicSpotify = playlist.data.items[0].track.name;
+      const url = body.webhookEndpoint + '?email=' + user + '&action=spotify';
+      const res = await axios.post(url, {
+        subject: 'Spotify warning',
+        html: `<p>Hi, you have a new music added.</p>`,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (res.status !== 201) {
+        const error = {
+          response: {
+            status: res.status,
+            data: {
+              statusText: res.statusText,
+            },
+          },
+        };
+        throw error;
+      }
+      await supabase.from('profile').update({ datas: loadDatas }).eq('email', user);
+      return [200, 'success, you have a new music added'];
     } catch (error) {
       return [error.response.status, error.response.statusText];
     }
