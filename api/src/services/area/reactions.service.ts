@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import supabase from '../../config/supabase.config';
 import axios from 'axios';
+import { GitHubProfileStatus } from 'github-profile-status';
 
 @Injectable()
 export class ReactionsService {
@@ -149,6 +150,27 @@ export class ReactionsService {
           ]
         });
       return [201, 'reaction succeed'];
+    } catch (error) {
+      console.log("error", error)
+      return error;
+    }
+  }
+
+  async changeStatus(email: string, action: string, body: any): Promise<[number, string]> {
+    try {
+      const accessToken = await supabase.from('user_provider').select('token').eq('user_id', email).eq('provider_id', 'Github');
+      const githubProfileStatus = new GitHubProfileStatus({
+        token: accessToken.data[0].token,
+      });
+
+      await githubProfileStatus.clear();
+      await githubProfileStatus.set({
+        emoji: ':anger:',
+        message: 'I may be slow to respond.',
+        expiresAt: new Date(Date.now() + 1000 * 60 * 30),
+        limitedAvailability: true
+      });
+      return [201, 'success, status changed'];
     } catch (error) {
       console.log("error", error)
       return error;
