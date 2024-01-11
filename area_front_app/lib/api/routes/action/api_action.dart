@@ -10,7 +10,7 @@ class ApiAction {
     if (response.statusCode == 200) {
       try {
         final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-        final List<dynamic> actionsData = jsonResponse['message'];
+        final List<dynamic> actionsData = jsonResponse['actions'];
 
         final List<Map<String, String>> actions =
             actionsData.map<Map<String, String>>((dynamic item) {
@@ -22,7 +22,7 @@ class ApiAction {
 
         return actions;
       } catch (e) {
-        throw Exception('Failed to parse actions data');
+        return [];
       }
     } else {
       throw Exception(

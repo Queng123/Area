@@ -1,3 +1,4 @@
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_mailer.dart';
 import 'package:area_front_app/api/routes/services/api_user_services.dart';
 import 'package:flutter/material.dart';
 import 'package:area_front_app/components/oauth2_service_box.dart';
@@ -9,6 +10,7 @@ import 'package:area_front_app/api/routes/auth/oauth2/api_auth_google.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_spotify.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_deezer.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_discord.dart';
+import 'package:area_front_app/api/routes/auth/oauth2/api_auth_meteo.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -49,6 +51,8 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     ["Google", "lib/images/google.png"],
     ["Spotify", "lib/images/spotify.png"],
     ["Deezer", "lib/images/deezer.png"],
+    ["Mailer", "lib/images/mailer.png"],
+    ["Meteo", "lib/images/meteo.png"],
   ];
 
   final ScrollController _scrollController = ScrollController();
@@ -183,6 +187,10 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                         await ApiDeezer().authenticateWithDeezer();
                       case "Discord":
                         await ApiDiscord().authenticateWithDiscord();
+                      case "Meteo":
+                        await ApiMeteo().authenticateWithMeteo();
+                      case "Mailer":
+                        await ApiMailer().authenticateWithMailer();
                       default:
                         break;
                     }
@@ -325,7 +333,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Text(
-                "You have ${showAuthServices()}/5 services connected",
+                "You have ${showAuthServices()}/7 services connected",
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.grey.shade800,
@@ -456,7 +464,9 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
             ),
             if (isShowCopyArea)
               SizedBox(
-                height: Platform.isIOS ? MediaQuery.of(context).size.height * 0.43 : MediaQuery.of(context).size.height * 0.38,
+                height: Platform.isIOS
+                    ? MediaQuery.of(context).size.height * 0.43
+                    : MediaQuery.of(context).size.height * 0.38,
                 child: const CopyArea(),
               ),
           ],

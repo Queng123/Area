@@ -40,8 +40,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
       setState(() {
         listReactions = [
           {
-            'name': 'NO FOUND REACTION',
-            'description': 'NO FOUND REACTION',
+            'name': 'NOT CONNECTED',
+            'description': 'NOT CONNECTED TO ANY PROVIDER',
           },
         ];
       });
@@ -54,13 +54,12 @@ class _DashBoardPageState extends State<DashBoardPage> {
     setState(() {
       listActions = actions;
     });
-
     if (listActions.isEmpty) {
       setState(() {
         listActions = [
           {
-            'name': 'NO FOUND ACTION',
-            'description': 'NO FOUND ACTION',
+            'name': 'NOT CONNECTED',
+            'description': 'NOT CONNECTED TO ANY PROVIDER',
           },
         ];
       });

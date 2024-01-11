@@ -27,4 +27,6 @@ class ApiRoutes {
   static const String authorizeDeezer = 'https://connect.deezer.com/oauth/auth.php?';
   static const String authDiscord = 'auth/discord/callback';
   static const String authorizeDiscord = 'https://discord.com/api/oauth2/authorize?';
+  static const String authMeteo = 'auth/meteo';
+  static const String authMailer = 'auth/mailer';
 }

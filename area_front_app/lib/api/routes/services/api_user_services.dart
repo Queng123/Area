@@ -31,7 +31,7 @@ class ApiUserServices {
 
   static Future<int> deleteService(String serviceName) async {
 
-    if (serviceName != "Github" && serviceName != "Google" && serviceName != "Discord" && serviceName != "Spotify" && serviceName != "Deezer") {
+    if (serviceName != "Github" && serviceName != "Google" && serviceName != "Discord" && serviceName != "Spotify" && serviceName != "Deezer" && serviceName != "Mailer" && serviceName != "Meteo") {
       return 400;
     }
 
