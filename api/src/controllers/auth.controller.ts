@@ -195,4 +195,26 @@ export class AuthController {
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });
     }
   }
+
+  @Get('meteo')
+  @ApiOperation({ summary: 'Launch the meteo process' })
+  async loginMeteo() {
+    try {
+      const [statusCode, message] = await this.authService.meteoLogin()
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+    } catch (error) {
+      console.error('Error during user login:', error);
+    }
+  }
+
+  @Get('mailer')
+  @ApiOperation({ summary: 'Launch the mailer process' })
+  async loginMailer() {
+    try {
+      const [statusCode, message] = await this.authService.mailerLogin()
+      console.log(`Status Code: ${statusCode}, Message: ${message}`);
+    } catch (error) {
+      console.error('Error during user login:', error);
+    }
+  }
 }

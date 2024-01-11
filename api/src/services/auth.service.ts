@@ -156,4 +156,60 @@ export class AuthService {
     }
     return [200, 'success, user connected with Discord'];
   }
+
+  async meteoLogin(): Promise<[number, string]> {
+    const user = await supabase.auth.getUser();
+
+    if (user.error) {
+        return [401, 'error, User not logged in'];
+    }
+
+    const service = await supabase.from('user_provider')
+        .select('user_id, provider_id')
+        .eq('user_id', user.data.user.email)
+        .eq('provider_id', 'Meteo');
+    if (service.data.length !== 0) {
+        return [409, 'error, User already connected with Meteo'];
+    }
+    const { data, error } = await supabase.from('user_provider')
+        .insert([
+            {
+                user_id: user.data.user.email,
+                provider_id: 'Meteo'
+            }
+        ]);
+    if (error) {
+        console.log(error);
+        return [500, 'error, something went wrong'];
+    }
+    return [200, 'success, user connected with Meteo'];
+  }
+
+  async mailerLogin(): Promise<[number, string]> {
+    const user = await supabase.auth.getUser();
+
+    if (user.error) {
+        return [401, 'error, User not logged in'];
+    }
+
+    const service = await supabase.from('user_provider')
+        .select('user_id, provider_id')
+        .eq('user_id', user.data.user.email)
+        .eq('provider_id', 'Mailer');
+    if (service.data.length !== 0) {
+        return [409, 'error, User already connected with Mailer'];
+    }
+    const { data, error } = await supabase.from('user_provider')
+        .insert([
+            {
+                user_id: user.data.user.email,
+                provider_id: 'Mailer'
+            }
+        ]);
+    if (error) {
+        console.log(error);
+        return [500, 'error, something went wrong'];
+    }
+    return [200, 'success, user connected with Mailer'];
+  }
 }
