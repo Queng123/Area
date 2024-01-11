@@ -208,7 +208,7 @@ export class ReactionsController {
       const [statusCode, message] = await this.reactionsService.getSpotifyRecommendations(email, action, req.body);
 
       console.log(`Status Code: ${statusCode}, Message: ${message}`);
-      return res.status(statusCode).json({ message: message });
+      return res.status(statusCode).json({ reactions: message });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });

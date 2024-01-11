@@ -66,7 +66,7 @@ export class ActionsController {
       const [statusCode, actions] = await this.actionsService.getActions();
 
       console.log(`Status Code: ${statusCode}, Message: ${actions}`);
-      return res.status(statusCode).json({ message: actions });
+      return res.status(statusCode).json({ actions: actions });
     } catch (error) {
       console.error('Error during provider creation:', error);
       return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ message: 'Error, internal server error' });

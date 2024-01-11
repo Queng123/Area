@@ -22,12 +22,21 @@ export class ActionsService {
 
   async getActions(): Promise<any> {
     try {
-      const response = await supabase.from('action').select('*');
+      const user = await supabase.auth.getUser();
 
-      if (response.error) {
-          throw response.error;
+      if (user.error) {
+        return [401, 'error, User not logged in'];
       }
-      return [200, response.data];
+
+      const providers = await supabase.from('user_provider')
+        .select('provider_id')
+        .eq('user_id', user.data.user.email);
+
+      const actions = await supabase.from('action')
+        .select('name, description, creation_url')
+        .in('provider_id', providers.data.map((provider) => provider.provider_id));
+
+      return [200, actions.data];
     } catch (error) {
         return [error.status, error.message];
     }

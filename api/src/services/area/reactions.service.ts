@@ -22,12 +22,21 @@ export class ReactionsService {
 
   async getReactions(): Promise<any> {
     try {
-      const response = await supabase.from('reaction').select('*');
+      const user = await supabase.auth.getUser();
 
-      if (response.error) {
-          throw response.error;
+      if (user.error) {
+        return [401, 'error, User not logged in'];
       }
-      return [200, response.data];
+
+      const providers = await supabase.from('user_provider')
+        .select('provider_id')
+        .eq('user_id', user.data.user.email);
+
+      const reactions = await supabase.from('reaction')
+        .select('name, description, callback_url')
+        .in('provider_id', providers.data.map((provider) => provider.provider_id));
+
+      return [200, reactions.data];
     } catch (error) {
         return [error.status, error.message];
     }
