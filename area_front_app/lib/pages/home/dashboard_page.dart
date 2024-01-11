@@ -102,7 +102,9 @@ class _DashBoardPageState extends State<DashBoardPage> {
               reactionSelected = value;
             });
           }, listReactions),
-          const SizedBox(height: 118),
+          SizedBox(
+            height: Platform.isIOS ? 118 : 60.0,
+          ),
           GenericButton(
             onTap: _onAreaCreateButtonPressed,
             buttonText: "Create Area",
@@ -181,33 +183,28 @@ class _DashBoardPageState extends State<DashBoardPage> {
   Widget _buildDropdownButton(List<Map<String, String>> items,
       {String? title}) {
     return DropdownButton<String>(
-      value: items[0]['name'],
-      onChanged: (String? value) {
+      value: title == 'Action' ? actionSelected : reactionSelected,
+      icon: const Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: const TextStyle(color: Colors.black),
+      underline: Container(
+        height: 2,
+        color: Colors.black,
+      ),
+      onChanged: (String? newValue) {
         setState(() {
           if (title == 'Action') {
-            actionSelected = value!;
+            actionSelected = newValue!;
           } else {
-            reactionSelected = value!;
+            reactionSelected = newValue!;
           }
         });
       },
-      items: items.map((item) {
+      items: items.map<DropdownMenuItem<String>>((Map<String, String> item) {
         return DropdownMenuItem<String>(
           value: item['name'],
-          child: GestureDetector(
-            onLongPress: () {
-              _showDescription(item['description']!);
-            },
-            child: Center(
-              child: Text(
-                item['description']!,
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
+          child: Text(item['name']!),
         );
       }).toList(),
     );
@@ -232,7 +229,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 100,
+            height: Platform.isIOS ? 100 : 60.0,
             child: _buildPicker(title, items, onChanged),
           ),
         ],

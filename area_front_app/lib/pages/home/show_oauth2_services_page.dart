@@ -10,6 +10,7 @@ import 'package:area_front_app/api/routes/auth/oauth2/api_auth_spotify.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_deezer.dart';
 import 'package:area_front_app/api/routes/auth/oauth2/api_auth_discord.dart';
 import 'dart:async';
+import 'dart:io';
 
 class OAuth2ServicesPage extends StatefulWidget {
   const OAuth2ServicesPage({super.key});
@@ -243,7 +244,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 20),
+            SizedBox(height: Platform.isIOS ? 20 : 10),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Row(
@@ -380,7 +381,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: Platform.isIOS ? 10 : 0),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 40.0),
               child: Divider(
@@ -390,9 +391,9 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
             ),
             if (isShowMiniDash)
               Padding(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 8,
-                  vertical: 8,
+                  vertical: Platform.isIOS ? 8 : 4,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -455,7 +456,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
             ),
             if (isShowCopyArea)
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.43,
+                height: Platform.isIOS ? MediaQuery.of(context).size.height * 0.43 : MediaQuery.of(context).size.height * 0.38,
                 child: const CopyArea(),
               ),
           ],

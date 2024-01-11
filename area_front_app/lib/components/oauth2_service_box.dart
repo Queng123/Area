@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class OAuth2ServiceBox extends StatelessWidget {
   final String oauth2Name;
@@ -22,10 +23,12 @@ class OAuth2ServiceBox extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
-          color: powerOn ? Colors.grey[900] : const Color.fromARGB(44, 164, 167, 189),
+          color: powerOn
+              ? Colors.grey[900]
+              : const Color.fromARGB(44, 164, 167, 189),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 25.0),
+          padding: EdgeInsets.symmetric(vertical: Platform.isIOS ? 25 : 5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -34,7 +37,7 @@ class OAuth2ServiceBox extends StatelessWidget {
                 height: 65,
                 color: powerOn ? Colors.white : Colors.grey.shade700,
               ),
-              const SizedBox(height: 15),
+              SizedBox(height: Platform.isIOS ? 15 : 5),
               Row(
                 children: [
                   Expanded(

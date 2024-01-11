@@ -4,6 +4,7 @@ import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
 import 'package:area_front_app/components/styled_text_field.dart';
 import 'package:area_front_app/components/generic_button.dart';
 import 'package:area_front_app/models/profile_data.dart';
+import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -43,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[300],
         automaticallyImplyLeading: false,
+        centerTitle: true,
         title: const Text(
           "Profile",
           style: TextStyle(
@@ -74,7 +76,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 200),
+                SizedBox(
+                  height: Platform.isIOS ? 200 : 150.0,
+                ),
                 GenericButton(
                   onTap: () {
                     if (_formKey.currentState?.validate() ?? false) {
