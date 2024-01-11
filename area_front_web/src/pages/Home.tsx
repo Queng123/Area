@@ -212,6 +212,10 @@ export function Home() {
         }
     };
 
+    const CreateArea = () => {
+        navigate('/home/area');
+    };
+
     return (
         <div className='body'>
             <h1>Welcome, {username}</h1>
@@ -244,6 +248,7 @@ export function Home() {
                     </div>
                 </div>
             </div>
+            <button className='button-circle' onClick={CreateArea}>Create Area</button>
             <div className='button-container'>
                 <button className='button-circle' onClick={handleClick}>Log Out</button>
                 <button className='button-circle' onClick={DeleteAccount}>Delete account</button>
