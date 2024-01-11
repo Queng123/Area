@@ -7,6 +7,7 @@ import axios from 'axios';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
+  (app as any).httpAdapter.instance.set('json spaces', 2);
 
   const config = new DocumentBuilder()
     .setTitle('Area-API')
