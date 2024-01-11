@@ -73,61 +73,39 @@ As we saw, the main purpose of the application is to allow users to create autom
 - **Github**
 - **Discord**
 - **Spotify**
-- **Calendar**
-- **Youtube**
+- **Deezer**
+- **Google**
 
 
 #### Actions:
 
 - **Github**
-  - Create a ticket
-  - Create a PR
+  - Star a repo
+  - Opened PR
 
 - **Spotify**
     - Spotify like a song
 
-- **Calendar**
-    - Meeting reminder
+- **Deezer**
+    - Deezer like a song
 
-- **Youtube**
-    - Items price checker
-    - Game price checker
+- **Google**
+    - Receive a mail
+
+- **Discord**
+    - Join a new server
+
+- **Weather**
+    - Temperature below a certain value
 
 #### Reactions:
 
-- **Discord**
-    - Send a message
-- **Mail**
+- **Spotify**
+    - Play a song
+    - Send a song recommendation
+- **Google**
     - Send a mail
-
-#### AREA (Action-REAction Execution):
-
-##### Github - Discord
-- **Action**: Create a ticket
-- **Action**: Create a PR
-- **Reaction**: Message Discord
-
-##### Spotify - Discord
-- **Action**: Like a song
-- **Reaction**: Message Discord
-
-##### Github - Discord
-- **Action**: Daily tasks and PR reminder
-- **Reaction**: Message Discord
-
-##### Calendar - Discord
-- **Action**: Meeting reminder
-- **Reaction**: Message Discord
-
-##### Youtube - Discord
-- **Action**: Like a video
-- **Action**: Dislike a video
-- **Reaction**: Message Discord
-
-##### Spotify - Mail
-- **Action**: Follow streamer
-- **Reaction**: Mail
-
-##### Github - Mail
-- **Action**: Star a repo
-- **Reaction**: Mail
+- **Deezer**
+    - Send a song recommendation
+- **Github**
+    - Change your status
