@@ -4,11 +4,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiDiscord {
   static String clientID = dotenv.env['DISCORD_CLIENT_ID'] ?? '';
-  static String clientSecret = dotenv.env['DISCORD_CLIENT_SECRET'] ?? '';
   static String clientSCOPE = dotenv.env['DISCORD_CLIENT_SCOPE'] ?? '';
 
   Future<void> authenticateWithDiscord() async {
-    if (clientID.isEmpty || clientSecret.isEmpty) {
+    if (clientID.isEmpty) {
       throw 'Missing Discord client ID or client secret';
     }
 
