@@ -99,6 +99,17 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
     return count;
   }
 
+  int showArea() {
+    int count = 0;
+    for (var area in userProfile.listAreas) {
+      if (area['action_id'] != 'Loading...' &&
+          area['reaction_id'] != 'Loading...') {
+        count++;
+      }
+    }
+    return count;
+  }
+
   ListView buildOAuth2ServicesList() {
     return ListView.builder(
       controller: _scrollController,
@@ -382,7 +393,7 @@ class _OAuth2ServicesPageState extends State<OAuth2ServicesPage> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Text(
-                "Manage your Area",
+                "You have ${showArea()} areas",
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.grey.shade800,

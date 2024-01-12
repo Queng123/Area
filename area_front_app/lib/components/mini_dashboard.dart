@@ -30,8 +30,7 @@ class MiniDashBoard extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               color: Colors.grey[900],
             ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25.0),
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
