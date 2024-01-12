@@ -7,7 +7,7 @@ import logo from '../assets/logo.png';
 import googleLogo from '../assets/google.png';
 import discordLogo from '../assets/discord.png';
 import githubLogo from '../assets/github.png';
-import msteamsLogo from '../assets/msteams.png';
+import deezerLogo from '../assets/deezer.png';
 import spotifyLogo from '../assets/spotify.png';
 
 interface Service {
@@ -23,9 +23,9 @@ export function Home() {
     const clientSCOPEdiscord = process.env.DISCORD_CLIENT_SCOPE;
     const clientIDgithub = process.env.GITHUB_CLIENT_ID;
     const clientSCOPEgithub = process.env.GITHUB_CLIENT_SCOPE;
-    const clientIDmsteams = process.env.MSTEAMS_CLIENT_ID;
-    const clientSCOPEmsteams = process.env.MSTEAMS_CLIENT_SCOPE;
-    const clientSECRETmsteams = process.env.MSTEAMS_CLIENT_SECRET;
+    const clientIDdeezer = process.env.DEEZER_CLIENT_ID;
+    const clientSCOPEdeezer = process.env.DEEZER_CLIENT_SCOPE;
+    const clientSECRETdeezer = process.env.DEEZER_CLIENT_SECRET;
     const clientIDspotify = process.env.SPOTIFY_CLIENT_ID;
     const clientSCOPEspotify = process.env.SPOTIFY_CLIENT_SCOPE;
     const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -38,7 +38,7 @@ export function Home() {
     const [isGoogleConnected, setIsGoogleConnected] = useState(false);
     const [isDiscordConnected, setIsDiscordConnected] = useState(false);
     const [isGithubConnected, setIsGithubConnected] = useState(false);
-    const [isMsteamsConnected, setIsMsteamsConnected] = useState(false);
+    const [isDeezerConnected, setIsDeezerConnected] = useState(false);
     const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +97,7 @@ export function Home() {
                         setIsGithubConnected(service.isConnected);
                         break;
                     case 'Msteams':
-                        setIsMsteamsConnected(service.isConnected);
+                        setIsDeezerConnected(service.isConnected);
                         break;
                     case 'Spotify':
                         setIsSpotifyConnected(service.isConnected);
@@ -180,9 +180,9 @@ export function Home() {
         }
     };
 
-    const MsteamsLogin = async () => {
-        const authCallbackURL = encodeURIComponent(`${BASE_URL}/auth/teams/callback`);
-        const link = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientIDmsteams}&scope=${clientSCOPEmsteams}&redirect_uri=${authCallbackURL}&response_type=code&client_secret=${clientSECRETmsteams}`;
+    const DeezerLogin = async () => {
+        const authCallbackURL = encodeURIComponent(`${BASE_URL}/auth/deezer/callback`);
+        const link = `https://connect.deezer.com/oauth/auth.php?client_id=${clientIDdeezer}&scope=${clientSCOPEdeezer}&redirect_uri=${authCallbackURL}&response_type=code&client_secret=${clientSECRETdeezer}`;
 
         const canOpen = window.open(link, '_blank');
         if (canOpen) {
@@ -237,8 +237,8 @@ export function Home() {
                         <button className='service-button' onClick={() => DisconnectService('Github')}>Logout</button>
                     </div>
                     <div className="service-box box-color">
-                        <img src={msteamsLogo} alt="Logo" className='icons' onClick={MsteamsLogin}/>
-                        <div className='text'>{isMsteamsConnected ? 'Connected' : 'Not Connected'}</div>
+                        <img src={deezerLogo} alt="Logo" className='icons' onClick={DeezerLogin}/>
+                        <div className='text'>{isDeezerConnected ? 'Connected' : 'Not Connected'}</div>
                         <button className='service-button' onClick={() => DisconnectService('msteams')}>Logout</button>
                     </div>
                     <div className="service-box box-color">
