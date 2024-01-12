@@ -9,6 +9,8 @@ import discordLogo from '../assets/discord.png';
 import githubLogo from '../assets/github.png';
 import deezerLogo from '../assets/deezer.png';
 import spotifyLogo from '../assets/spotify.png';
+import meteoLogo from '../assets/meteo.png';
+import mailerLogo from '../assets/mailer.png';
 
 interface Service {
     name: string;
@@ -40,6 +42,8 @@ export function Home() {
     const [isGithubConnected, setIsGithubConnected] = useState(false);
     const [isDeezerConnected, setIsDeezerConnected] = useState(false);
     const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
+    const [isMeteoConnected, setIsMeteoConnected] = useState(false);
+    const [isMailerConnected, setIsMailerConnected] = useState(false);
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
@@ -101,6 +105,12 @@ export function Home() {
                         break;
                     case 'Spotify':
                         setIsSpotifyConnected(service.isConnected);
+                        break;
+                    case 'Meteo':
+                        setIsMeteoConnected(service.isConnected);
+                        break;
+                    case 'Mailer':
+                        setIsMailerConnected(service.isConnected);
                         break;
                     default:
                         break;
@@ -212,6 +222,18 @@ export function Home() {
         }
     };
 
+    const MeteoLogin = async () => {
+        const response = await axios.get(`${BASE_URL}/auth/meteo`);
+        console.log(response);
+        statusServices();
+    };
+
+    const MailerLogin = async () => {
+        const response = await axios.get(`${BASE_URL}/auth/mailer`);
+        console.log(response);
+        statusServices();
+    };
+
     const CreateArea = () => {
         navigate('/home/area');
     };
@@ -219,7 +241,7 @@ export function Home() {
     return (
         <div className='body'>
             <h1>Welcome, {username}</h1>
-            <div className='square'>
+            <div className='squared'>
                 <div className="service-boxes">
                     <div className="service-box box-color">
                         <img src={googleLogo} alt="Logo" className='icons' onClick={GoogleLogin}/>
@@ -245,6 +267,16 @@ export function Home() {
                         <img src={spotifyLogo} alt="Logo" className='icons' onClick={SpotifyLogin}/>
                         <div className='text'>{isSpotifyConnected ? 'Connected' : 'Not Connected'}</div>
                         <button className='service-button' onClick={() => DisconnectService('Spotify')}>Logout</button>
+                    </div>
+                    <div className="service-box box-color">
+                        <img src={meteoLogo} alt="Logo" className='icons' onClick={MeteoLogin}/>
+                        <div className='text'>{isMeteoConnected ? 'Connected' : 'Not Connected'}</div>
+                        <button className='service-button' onClick={() => DisconnectService('Meteo')}>Logout</button>
+                    </div>
+                    <div className="service-box box-color">
+                        <img src={mailerLogo} alt="Logo" className='icons' onClick={MailerLogin}/>
+                        <div className='text'>{isMailerConnected ? 'Connected' : 'Not Connected'}</div>
+                        <button className='service-button' onClick={() => DisconnectService('Mailer')}>Logout</button>
                     </div>
                 </div>
             </div>

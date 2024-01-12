@@ -16,10 +16,10 @@
     background-color: black;
 }
 
-.square {
+.squared {
     align-items: center;
     width: 80%;
-    max-width: 600px;
+    max-width: 900px;
     margin: 0 auto;
     height: auto;
     background-color: #E0E0E0;
