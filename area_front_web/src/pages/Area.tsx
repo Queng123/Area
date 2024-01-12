@@ -4,13 +4,13 @@ import axios from 'axios';
 import './styles/Area.css';
 
 interface Reaction {
-    id: number;
     name: string;
+    description: string;
 }
 
-interface Actions {
-    id: number;
+interface Action {
     name: string;
+    description: string;
 }
 
 interface Area {
@@ -32,21 +32,22 @@ export function Area()
 
     const AddArea = async () => {
         const response = await axios.get(`${BASE_URL}/area/${selectedAction}-${selectedReaction}`);
-        console.log('Server response:', response.data);
+        //console.log('Server response:', response.data);
         loadArea();
     };
 
     const DeleteArea = async () => {
         const response = await axios.delete(`${BASE_URL}/area/${selectedAction}-${selectedReaction}`);
-        console.log('Server response:', response.data);
+        //console.log('Server response:', response.data);
         loadArea();
     };
 
     const loadActions = async () => {
         try {
-            const response = await axios.get<{ message: Actions[] }>(`${BASE_URL}/actions`);
+            const response = await axios.get(`${BASE_URL}/actions`);
             console.log('Server response:', response.data);
-            setActions(response.data.message.map(item => item.name));
+            const actionNames = response.data.actions.map((action: Action) => action.name);
+            setActions(actionNames);
         } catch (error) {
             console.error('Error during load of actions:', error);
         }
@@ -54,9 +55,10 @@ export function Area()
 
     const loadReactions = async () => {
         try {
-            const response = await axios.get<{ message: Reaction[] }>(`${BASE_URL}/reactions`);
+            const response = await axios.get(`${BASE_URL}/reactions`);
             console.log('Server response:', response.data);
-            setReactions(response.data.message.map(item => item.name));
+            const reactionNames = response.data.reactions.map((reaction: Reaction) => reaction.name);
+            setReactions(reactionNames);
         } catch (error) {
             console.error('Error during load of reactions:', error);
         }
@@ -64,7 +66,7 @@ export function Area()
 
     const loadArea = async () => {
         const response = await axios.get<{ message: Area[] }>(`${BASE_URL}/area`);
-        console.log('Server response:', response.data);
+        //console.log('Server response:', response.data);
         const combinedData = response.data.message.map(item => `${item.action_id} - ${item.reaction_id}`);
         setArea(combinedData);
     };
