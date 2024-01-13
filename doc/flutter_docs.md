@@ -12,14 +12,22 @@ The application code is structured as follows:
   - **`protocol/`**
     - `api_protocol_body.dart`: Defines the API protocol body.
   - **`routes/`**
-    - `api_delete_account.dart`: Delete account route.
+    - **`action/`**
+      - `api_action.dart`: Action route.
+    - **`area/`**
+      - `api_area.dart`: Area route.
     - **`auth/`**
       - `api_login.dart`: Login route.
       - `api_logout.dart`: Logout route.
       - `api_register.dart`: Registration route.
       - **`oauth2/`**
+        - `api_auth_deezer.dart`: Deezer authentication.
+        - `api_auth_discord.dart`: Discord authentication.
         - `api_auth_github.dart`: GitHub authentication.
         - `api_auth_google.dart`: Google authentication.
+        - `api_auth_mailer.dart`: Mailer authentication.
+        - `api_auth_meteo.dart`: Weather authentication.
+        - `api_auth_spotify.dart`: Spotify authentication.
       - **`manage_password/`**
         - `api_reset_password.dart`: Reset password route.
       - **`profile/`**
@@ -29,13 +37,11 @@ The application code is structured as follows:
         - `api_reaction.dart`: Reaction route.
       - **`services/`**
         - `api_user_services.dart`: User-related services.
-  - **`storage/`**
-    - `token_storage.dart`: Manages authentication token storage.
 
 - **`components/`**
   - `bottom_navigation_bar.dart`: Reusable bottom navigation bar.
-  - **`build_text_dashboard.dart`**
-  - `copy_area_card.dart`
+  - **`build_text_dashboard.dart`**: Dashboard text builder.
+  - `copy_area_card.dart` : Copy area card.
   - **`dialogs/`**
     - `custom_dialog.dart`: Custom dialog box.
   - `fake_user_profile.dart`: Fake user profile.
@@ -48,9 +54,14 @@ The application code is structured as follows:
 
 - **`images/`** : Contains images used in the application.
   - `config2.jpeg`
+  - `deezer.png`
+  - `discord.png`
   - `github.png`
   - `google.png`
   - `logo.png`
+  - `mailer.png`
+  - `meteo.png`
+  - `spotify.png`
 
 - `main.dart`: Application entry point.
 
@@ -73,7 +84,7 @@ The application code is structured as follows:
     - `setting_page.dart`: Settings page.
   - `splash_page.dart`: Introduction or startup page.
 
-23 directories, 45 files
+23 directories, 54 files
 
 # Adding a Route in Flutter
 
@@ -161,9 +172,12 @@ If you want to add a new route to your Flutter application, follow these steps:
       ```dart
       List myOAuth2Services = [
         ["Github", "lib/images/github.png"],
+        ["Discord", "lib/images/discord.png"],
         ["Google", "lib/images/google.png"],
-        ["Discord", "lib/images/google.png"],
-        ["Steam", "lib/images/google.png"],
+        ["Spotify", "lib/images/spotify.png"],
+        ["Deezer", "lib/images/deezer.png"],
+        ["Mailer", "lib/images/mailer.png"],
+        ["Meteo", "lib/images/meteo.png"],
       ];
       ```
 
