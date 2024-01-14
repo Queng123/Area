@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-import './styles/Reset_Password.css';
-import logo from '../assets/logo.png';
+import './ResetPassword.css';
+import logo from '../../assets/logo.png';
 
-export function Reset_Password() {
+export function ResetPassword() {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const [email, setEmail] = useState('');
+    const navigate = useNavigate();
 
     const [errorEmail, setErrorEmail] = useState('');
 
@@ -16,6 +18,10 @@ export function Reset_Password() {
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newEmail = e.target.value;
         setEmail(newEmail);
+    };
+
+    const LoginRedirection = () => {
+        navigate('/login');
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -58,8 +64,8 @@ export function Reset_Password() {
     };
 
     return (
-        <div className='body'>
-            <div className='square'>
+        <div className='reset-password-background'>
+            <div className='reset-password-square'>
                 <img src={logo} alt="Logo" className="logo" />
                 <span className="success-message">{successMessage}</span>
                 <span className="error-message">{errorMessage}</span>
@@ -74,6 +80,10 @@ export function Reset_Password() {
                     <span className="error">{errorEmail}</span>
                     <button className="password-button" type="submit">Reset Password</button>
                 </form>
+                <div className="text-already-account">
+                    Password Reset?
+                    <span className="blue-text-link" onClick={LoginRedirection}>Login Here</span>
+                </div>
             </div>
         </div>
     )

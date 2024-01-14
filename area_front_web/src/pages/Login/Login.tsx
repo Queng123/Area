@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 
-import './styles/Login.css';
-import logo from '../assets/logo.png';
-import googleLogo from '../assets/googleLogo.png';
+import './Login.css';
+import logo from '../../assets/logo.png';
+import googleLogo from '../../assets/googleLogo.png';
 
 export function Login() {
     const navigate = useNavigate();
@@ -82,7 +82,7 @@ export function Login() {
     };
 
     const RegisterRedirection = () => {
-        navigate('/');
+        navigate('/register');
     };
 
     const ForgotPassword = () => {
@@ -90,8 +90,8 @@ export function Login() {
     };
 
     return (
-        <div className='body'>
-            <div className='square'>
+        <div className='login-background'>
+            <div className='login-square'>
                 <img src={logo} alt="Logo" className="logo" />
                 {successMessage && <div className="success-message">{successMessage}</div>}
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -116,8 +116,6 @@ export function Login() {
                     <span className="forgot-password" onClick={ForgotPassword}>Forgot Password?</span>
                     <button className="login-button" type="submit">Login</button>
                 </form>
-                <div className="separator-text">Or continue with</div>
-                <img src={googleLogo} alt="Google Logo" className="google-logo" />
                 <div className="text-already-account">
                     Not a member?
                     <span className="blue-text-link" onClick={RegisterRedirection}>Register here</span>

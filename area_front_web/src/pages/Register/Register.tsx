@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 
-import './styles/Register.css';
-import logo from '../assets/logo.png';
+import './Register.css';
+import logo from '../../assets/logo.png';
 
 export function Register() {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -108,8 +108,8 @@ export function Register() {
     };
 
     return (
-        <div className='body'>
-            <div className='square'>
+        <div className='register-background'>
+            <div className='register-square'>
                 <img src={logo} alt="Logo" className="logo" />
                 {successMessage && <div className="success-message">{successMessage}</div>}
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -154,7 +154,7 @@ export function Register() {
                 </form>
                 <div className="text-already-account">
                     Have an account?
-                    <span className="blue-text-link" onClick={LoginRedirection}>Login</span>
+                    <span className="blue-text-link" onClick={LoginRedirection}>Login Here</span>
                 </div>
             </div>
         </div>

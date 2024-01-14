@@ -1,0 +1,128 @@
+.register-background {
+    background-color: #BDBDBD;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.register-square {
+    background-color: #E0E0E0;
+    position: fixed;
+    width: 40vw;
+    height: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    align-items: center;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+}
+
+@media (max-width: 600px) {
+    .register-square {
+        width: 80vw;
+    }
+}
+
+.logo {
+    max-width: 40%;
+    height: auto;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.register-square input {
+    width: 50%;
+    padding: 3%;
+    border: 3px solid #ffffff;
+    border-radius: 5px;
+    background-color: #F5F5F5;
+    margin-top: 10px;
+}
+
+.register-square input:focus {
+    border-color: black;
+    outline: none;
+}
+
+.register-button {
+    background-color: #000;
+    color: #fff;
+    width: 58%;
+    padding: 4%;
+    border: 0px solid #ffffff;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.register-button:hover {
+    background-color: #888;
+}
+
+.text-already-account {
+    display: flex;
+    align-items: center;
+    cursor: default;
+    color: #616161;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .text-already-account {
+        font-size: 12px;
+    }
+}
+
+.blue-text-link {
+    color: #2196F3;
+    margin-left: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+    .error {
+        font-size: 8px;
+    }
+}
+
+.error-message {
+    color: red;
+    font-size: 16px;
+}
+
+@media (max-width: 600px) {
+    .error-message {
+        font-size: 10px;
+    }
+}
+
+.success-message {
+    color: rgb(46, 163, 0);
+    font-size: 16px;
+}
+
+@media (max-width: 600px) {
+    .success-message {
+        font-size: 9px;
+    }
+}

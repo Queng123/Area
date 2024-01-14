@@ -1,0 +1,35 @@
+.splash-background {
+    width: 100vw;
+    height: 100vh;
+    background-color: #BDBDBD;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.splash-position {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.splash-logo {
+    width: 300px;
+    animation: fadeInOut 1.5s ease-in-out infinite;
+}
+
+@media (max-width: 600px) {
+    .splash-logo {
+        width: 150px;
+    }
+}
+
+@keyframes fadeInOut {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
